@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'company-lunch.styles.scss';
+import './company-lunch.styles.scss';
 
 class CompanyLunch extends Component{
     render(){
