@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import 'login.styles.scss';
+import 'options.styles.scss';
 
-class Login extends Component{
+class Options extends Component{
     render(){
         return(
             <div>
-                Login
+                Options
             </div>
         )
     }
 }
-export default Login;
+export default Options;
