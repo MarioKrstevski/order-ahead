@@ -12,7 +12,7 @@ class Login extends Component{
         isAuthenticated: false,
         email: "peter@klaven",
         password: "cityslicka",
-        response: '',
+        error: false
     }
     setRedirect = () => {
         this.setState({
@@ -24,6 +24,11 @@ class Login extends Component{
           <Redirect to='/options' />
     }
 
+    renderError = () => {
+        return  (this.state.error) &&
+           <span style={{color:'red'}}> Login Failed </span>
+     }
+
     async componentDidMount() {
         // let user = await fetchUser()
         // this.setState({ user })
@@ -33,11 +38,20 @@ class Login extends Component{
     tryLogin = async() =>{
         const userData = {
             email: this.state.email,
-            password: this.state.password
+            // password: this.state.password
         }
-        const response = await api.login(userData);
-        this.setState({response}, console.log('Response ' ,response));
-        this.setRedirect();
+        const response = await api.login(userData); 
+        this.setState( state => {
+            if( response.token ){
+                return {
+                    isAuthenticated: true,
+                }
+            } else {
+                return {
+                    error: true
+                }
+            }
+        } , console.log('Response ' ,response));
     }
     render(){
         return(
@@ -45,6 +59,7 @@ class Login extends Component{
                 Login
                 {this.renderRedirect()}
                 <button onClick={this.tryLogin}> Login </button>
+                {this.renderError()}
             </LoginWrapper>
         )
     }

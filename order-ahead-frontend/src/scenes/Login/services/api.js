@@ -7,7 +7,7 @@ export default {
             return res.data;
           })
           .catch(err => {
-            console.log('Error from login axios: ', err);
+            return err;
           });
     }
 };
