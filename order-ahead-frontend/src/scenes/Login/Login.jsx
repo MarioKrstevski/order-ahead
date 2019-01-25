@@ -3,6 +3,7 @@ import './login.styles.scss';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom'
 import api from './services/api';
+import { Form, Field } from 'react-final-form'
 
 const LoginWrapper = styled.div`
     /* border: 1px solid black; */
@@ -56,6 +57,8 @@ class Login extends Component{
     render(){
         return(
             <LoginWrapper>
+
+                
                 Login
                 {this.renderRedirect()}
                 <button onClick={this.tryLogin}> Login </button>
