@@ -6,27 +6,7 @@ import Login  from './scenes/Login/Login';
 import CompanyLunch from './scenes/CompanyLunch/CompanyLunch';
 import Options from './scenes/Options/Options';
 
-const MainMenu = () => {
 
-  return(<div>
-    <Link to="/options">
-      <button>Options</button>
-    </Link>
-    <Link to="/companylunch">
-      <button>Company Lunch</button>
-    </Link>
-    <Link to="/login">
-      <button>Login</button>
-    </Link>
-    {/* <Link to="/profile">
-      <button>Profile</button>
-    </Link>
-    <Link to="/admin">
-      <button>Admin</button>
-    </Link> */}
-  </div>)
-
-}
 
 const AppWrapper = styled.div`
    text-align: center;
@@ -48,7 +28,27 @@ const RouteView = styled.div`
     border: 1px solid black;
   }
 `
+const MainMenu = () => {
 
+  return(<div>
+    <Link to="/options">
+      <button>Options</button>
+    </Link>
+    <Link to="/companylunch">
+      <button>Company Lunch</button>
+    </Link>
+    <Link to="/login">
+      <button>Login</button>
+    </Link>
+    {/* <Link to="/profile">
+      <button>Profile</button>
+    </Link>
+    <Link to="/admin">
+      <button>Admin</button>
+    </Link> */}
+  </div>)
+
+}
 class App extends Component {
   render() {
     return (
@@ -64,6 +64,7 @@ class App extends Component {
               <Route exact path="/companylunch" component={CompanyLunch} />
               {/* <Route exact path="/profile" component={Profile} /> */}
               {/* <Route exact path="/admin" component={Admin} /> */}
+              <Route component={Login} /> {/* Returns to login if we access unexsisting routes */}
             </RouteView>
         </AppWrapper>
       </Router>

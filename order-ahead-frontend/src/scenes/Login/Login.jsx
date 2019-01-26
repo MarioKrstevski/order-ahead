@@ -3,21 +3,29 @@ import './login.styles.scss';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom'
 import api from './services/api';
-import { Form, Field } from 'react-final-form'
+import { Form, Field, FormSpy } from 'react-final-form';
+import createDecorator from 'final-form-focus'; 
 
 const LoginWrapper = styled.div`
     /* border: 1px solid black; */
 `;
+const FieldRow = styled.div`
+    background-color: ${props => props.active ? 'lightcyan' : 'white'};
+`;
 class Login extends Component{
     state = {
         isAuthenticated: false,
-        email: "peter@klaven",
-        password: "cityslicka",
         error: false
     }
     setRedirect = () => {
         this.setState({
             isAuthenticated: true
+        })
+    }
+
+    setRedirect = () => {
+        this.setState({
+            error: true
         })
     }
     renderRedirect = () => {
@@ -30,34 +38,104 @@ class Login extends Component{
            <span style={{color:'red'}}> Login Failed </span>
      }
 
-    async componentDidMount() {
-        // let user = await fetchUser()
-        // this.setState({ user })
-
-
-    }
-    tryLogin = async() =>{
+    tryLogin = async values =>{
+        console.log('The Values: ' , values);
         const userData = {
-            email: this.state.email,
-            // password: this.state.password
+            username: values.username.trim(),
+            password: values.password.trim()
         }
+        console.log('The userData: ' , userData);
+
+        // email: "peter@klaven",
+        // password: "cityslicka",
+        // or just any information works as well
+
         const response = await api.login(userData); 
-        this.setState( state => {
-            if( response.token ){
-                return {
-                    isAuthenticated: true,
-                }
-            } else {
-                return {
-                    error: true
-                }
-            }
-        } , console.log('Response ' ,response));
+        // this.setState( state => {
+        //     if( response.token ){
+        //         return {
+        //             isAuthenticated: true,
+        //         }
+        //     } else {
+        //         return {
+        //             error: true
+        //         }
+        //     }
+        // } , console.log('Response ' ,response));
+
+        response.token ? this.setRedirect() : this.setError();
+        console.log('Response ' ,response);
     }
+
+    required = value => (value ? undefined: 'Required');
+
     render(){
+
+        const focusOnError = createDecorator();
         return(
             <LoginWrapper>
+                <Form onSubmit={this.tryLogin} 
+                    decorators={[focusOnError]}
+                    subscription={{
+                        submitting: true,
+                        values: true
+                    }}>
+                    {({handleSubmit, values, submitting}) => <form onSubmit={handleSubmit}>
+                        <div>
+                            <Field 
+                                name="username" 
+                                placeholder="Username"
+                                validate={this.required}
+                                subscription={{
+                                    value: true,
+                                    active: true,
+                                    error: true,
+                                    touched: true
+                                }}
+                            >
+                            {({input, meta, placeholder}) => (
+                                <FieldRow active={meta.active}>
+                                    <label htmlFor="username">Username</label>
+                                    <input {...input} placeholder={placeholder}/>
+                                    {meta.error && meta.touched && <span>{meta.error}</span>   }
+                                </FieldRow>
+                            )}
+                            </Field>
 
+                        </div>
+                        <div>
+                            <Field 
+                                name="password" 
+                                placeholder="Password"
+                                validate={this.required}
+                                subscription={{
+                                    value: true,
+                                    active: true,
+                                    error: true,
+                                    touched: true
+                                }}
+                            >
+                            {({input, meta, placeholder}) => (
+                                <FieldRow active={meta.active}>
+                                    <label htmlFor="password">Password</label>
+                                    <input {...input} placeholder={placeholder}/>
+                                    {meta.error && meta.touched && <span>{meta.error}</span>   }
+                                </FieldRow>
+                            )}
+                            </Field>
+                        </div>
+                        
+                        <button type="submit" disabled={submitting}>Submit</button>
+                        <FormSpy  subscription={{values: true}}>  
+                        {({values}) => (
+                            <pre>{JSON.stringify(values , undefined, 2)}</pre>
+                        )} 
+                        </FormSpy>
+                        {/* Weird bug if </FormSpy> is next to the } in the row above , it is an error... */}
+                        <pre>{JSON.stringify(values , undefined, 2)}</pre>
+                        </form>
+                    }
+                </Form>
                 
                 Login
                 {this.renderRedirect()}

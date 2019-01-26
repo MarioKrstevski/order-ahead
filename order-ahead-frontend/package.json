@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "final-form": "^4.11.0",
+    "final-form-focus": "^1.1.0",
     "node-sass": "^4.11.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
