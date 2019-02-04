@@ -23,7 +23,7 @@ class Login extends Component{
         })
     }
 
-    setRedirect = () => {
+    setError = () => {
         this.setState({
             error: true
         })
@@ -40,31 +40,33 @@ class Login extends Component{
 
     tryLogin = async values =>{
         console.log('The Values: ' , values);
-        const userData = {
-            username: values.username.trim(),
-            password: values.password.trim()
-        }
-        console.log('The userData: ' , userData);
+
+            const userData = {
+                username: values.username,
+                password: values.password,
+            }
+            console.log('The userData: ' , userData);
+            const response = await api.login(userData); 
+            response.token ? this.setRedirect() : this.setError();
+            console.log('Response ' ,response);
+       
 
         // email: "peter@klaven",
         // password: "cityslicka",
         // or just any information works as well
 
-        const response = await api.login(userData); 
-        // this.setState( state => {
-        //     if( response.token ){
-        //         return {
-        //             isAuthenticated: true,
-        //         }
-        //     } else {
-        //         return {
-        //             error: true
-        //         }
-        //     }
-        // } , console.log('Response ' ,response));
+        this.setState( state => {
+            if( response.token ){
+                return {
+                    isAuthenticated: true,
+                }
+            } else {
+                return {
+                    error: true
+                }
+            }
+        } , console.log('Response ' ,response));
 
-        response.token ? this.setRedirect() : this.setError();
-        console.log('Response ' ,response);
     }
 
     required = value => (value ? undefined: 'Required');

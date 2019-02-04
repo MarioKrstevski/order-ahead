@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './options.styles.scss';
+import './home.styles.scss';
 
-class Options extends Component{
+class Home extends Component{
     render(){
         return(
             <div>
@@ -10,4 +10,4 @@ class Options extends Component{
         )
     }
 }
-export default Options;
+export default Home;

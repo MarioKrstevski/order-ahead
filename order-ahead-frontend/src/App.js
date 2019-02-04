@@ -4,7 +4,7 @@ import './App.css';
 import styled from 'styled-components';
 import Login  from './scenes/Login/Login';
 import CompanyLunch from './scenes/CompanyLunch/CompanyLunch';
-import Options from './scenes/Options/Options';
+import Home from './scenes/Home/Home';
 
 
 
@@ -31,8 +31,8 @@ const RouteView = styled.div`
 const MainMenu = () => {
 
   return(<div>
-    <Link to="/options">
-      <button>Options</button>
+    <Link to="/home">
+      <button>Home</button>
     </Link>
     <Link to="/companylunch">
       <button>Company Lunch</button>
@@ -59,12 +59,12 @@ class App extends Component {
               <MainMenu />
           </Header>
             <RouteView>
-              <Route exact path="/options" component={Options} />
+              <Route exact path="/home" component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/companylunch" component={CompanyLunch} />
               {/* <Route exact path="/profile" component={Profile} /> */}
               {/* <Route exact path="/admin" component={Admin} /> */}
-              <Route component={Login} /> {/* Returns to login if we access unexsisting routes */}
+              {/* <Route component={Login} /> Returns to login if we access unexsisting routes */}
             </RouteView>
         </AppWrapper>
       </Router>
