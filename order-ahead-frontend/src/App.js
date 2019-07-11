@@ -1,10 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, Router } from "@reach/router";
 import "./App.css";
 import styled from "styled-components";
 import Login from "./scenes/Login/Login";
 import OwnerPage from "./scenes/OwnerPage/OwnerPage";
 import EmployeePage from "./scenes/EmployeePage/EmployeePage";
+
+import { AuthContext, AuthProvider } from "./AuthContext";
+import { AuthhContext } from "./AuthhContext";
 
 const AppWrapper = styled.div`
   text-align: center;
@@ -47,35 +50,29 @@ const MainMenu = () => {
     </div>
   );
 };
-function App() {
 
-  const Context = useContext(null));
-
-
-  const [user, setUser] = useState({});
-
-  const setUserAuthenticated = user => {
-    setUser(user);
-  };
-
-  const NotFound = () => <p>Sorry, nothing here</p>
+const NotFound = () => <p>Sorry, nothing here</p>;
+export default function App() {
+  const [user, setUser] = useState(null);
+  console.log("[App.js]  USER from CONTEXT:", user);
 
   return (
-    <Router>
-      <AppWrapper >
+    <AppWrapper>
+      <AuthhContext.Provider value={{ user, setUser }}>
         <Header>
           <h1>Welcome to React</h1>
           <MainMenu />
         </Header>
         <RouteView>
-            <NotFound default />
+          <Router>
             <EmployeePage path="/dailymenu" />
-            <Login  path="/"/>
-            <OwnerPage  path="/foods" />
+            <Login path="/" />
+            <OwnerPage path="/foods" />
+            <NotFound default />
+          </Router>
         </RouteView>
-      </AppWrapper>
-    </Router>
+      </AuthhContext.Provider>
+    </AppWrapper>
   );
 }
 
-export default App;
