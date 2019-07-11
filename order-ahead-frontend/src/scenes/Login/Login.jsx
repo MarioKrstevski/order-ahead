@@ -32,7 +32,6 @@ function Login() {
       password
     };
     const response = await api.login(userData);
-    response.token ? setIsAuthenticated(true) : setError(true);
     console.log("Response ", response);
 
     // email: "eve.holt@reqres.in",
@@ -44,7 +43,7 @@ function Login() {
       setUser({
         name: "Peter Klaven",
         token: response.token,
-        role: "testUser",
+        role: "employee",
         isAuthenticated: true
       });
       navigate("/dailymenu");

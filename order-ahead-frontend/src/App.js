@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { Link, Router } from "@reach/router";
-import ProtectedRoute from './ProtectedRoute';
+import {
+  Link,
+  Router,
+  Location
+} from "@reach/router";
+import ProtectedRoute from "./ProtectedRoute";
 
 import "./App.css";
 import styled from "styled-components";
@@ -32,9 +36,7 @@ const RouteView = styled.div`
   }
 `;
 
-
-
-const MainMenu = ({logout}) => {
+const MainMenu = ({ logout }) => {
   return (
     <div>
       <Link to="/foods">
@@ -54,7 +56,6 @@ const MainMenu = ({logout}) => {
 const NotFound = () => <p>Sorry, nothing here</p>;
 
 export default function App() {
-
   const logout = () => {
     setUser({
       name: null,
@@ -62,8 +63,8 @@ export default function App() {
       role: "visitor",
       isAuthenticated: false
     });
-  }
-  
+  };
+
   const [user, setUser] = useState({
     name: null,
     token: null,
@@ -74,23 +75,42 @@ export default function App() {
 
   return (
     <AppWrapper>
-      <AuthContext.Provider value={{ user, setUser }}>
-        <Header>
-          <h1>Welcome to React</h1>
-          <MainMenu logout={logout}/>
-        </Header>
-        <RouteView>
-          <Router>
-            {/* <ProtectedRoute  path="/dailymenu" component={EmployeePage} allowed={['employee']}/>
-            <ProtectedRoute  path="/" component={Login} allowed={['all']}/>
-            <ProtectedRoute  path="/foods" component={OwnerPage} allowed={['owner']}/> */}
-            <EmployeePage path="/dailymenu" />
-            <Login path="/" />
-            <OwnerPage path="/foods" />
-            <NotFound default />
-          </Router>
-        </RouteView>
-      </AuthContext.Provider>
+            <Location>
+              {({ location }) => (
+        <AuthContext.Provider value={{ user, setUser }}>
+          <Header>
+            <h1>Welcome to React</h1>
+            <MainMenu logout={logout} />
+          </Header>
+          <RouteView>
+                <Router>
+                  <ProtectedRoute
+                    path="/dailymenu"
+                    component={EmployeePage}
+                    allowed={["employee"]}
+                    authenticatedOnly
+                    prevLocation={location}
+                  />
+                  <ProtectedRoute
+                    path="/"
+                    component={Login}
+                    allowed={["all"]}
+                    authenticatedOnly={false}
+                    prevLocation={location}
+                  />
+                  <ProtectedRoute
+                    path="/foods"
+                    component={OwnerPage}
+                    allowed={["owner"]}
+                    authenticatedOnly
+                    prevLocation={location}
+                  />
+                  <NotFound default />
+                </Router>
+          </RouteView>
+        </AuthContext.Provider>
+              )}
+            </Location>
     </AppWrapper>
   );
 }
