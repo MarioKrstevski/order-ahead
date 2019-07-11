@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, Router } from "@reach/router";
+import ProtectedRoute from './ProtectedRoute';
 
 import "./App.css";
 import styled from "styled-components";
@@ -30,7 +31,10 @@ const RouteView = styled.div`
     border: 1px solid black;
   }
 `;
-const MainMenu = () => {
+
+
+
+const MainMenu = ({logout}) => {
   return (
     <div>
       <Link to="/foods">
@@ -42,6 +46,7 @@ const MainMenu = () => {
       <Link to="/login">
         <button>Login</button>
       </Link>
+      <button onClick={() => logout()}>Logout</button>
     </div>
   );
 };
@@ -49,8 +54,22 @@ const MainMenu = () => {
 const NotFound = () => <p>Sorry, nothing here</p>;
 
 export default function App() {
+
+  const logout = () => {
+    setUser({
+      name: null,
+      token: null,
+      role: "visitor",
+      isAuthenticated: false
+    });
+  }
   
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    name: null,
+    token: null,
+    role: "visitor",
+    isAuthenticated: false
+  });
   console.log("[App.js]  USER from CONTEXT:", user);
 
   return (
@@ -58,10 +77,13 @@ export default function App() {
       <AuthContext.Provider value={{ user, setUser }}>
         <Header>
           <h1>Welcome to React</h1>
-          <MainMenu />
+          <MainMenu logout={logout}/>
         </Header>
         <RouteView>
           <Router>
+            {/* <ProtectedRoute  path="/dailymenu" component={EmployeePage} allowed={['employee']}/>
+            <ProtectedRoute  path="/" component={Login} allowed={['all']}/>
+            <ProtectedRoute  path="/foods" component={OwnerPage} allowed={['owner']}/> */}
             <EmployeePage path="/dailymenu" />
             <Login path="/" />
             <OwnerPage path="/foods" />

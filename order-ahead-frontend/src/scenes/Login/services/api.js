@@ -1,16 +1,17 @@
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-    login: async(userData) => {
-        return axios.post('https://reqres.in/api/login', {
-          "email": "eve.holt@reqres.in",
-          "password": "cityslicka"
+  login: async userData => {
+    return axios
+      .post("https://reqres.in/api/login", {
+        email: "eve.holt@reqres.in",
+        password: "cityslicka"
       })
-        .then(res => {
-            return res.data;
-          })
-          .catch(err => {
-            return err;
-          });
-    }
+      .then(res => {
+        return res.data;
+      })
+      .catch(err => {
+        return err;
+      });
+  }
 };
