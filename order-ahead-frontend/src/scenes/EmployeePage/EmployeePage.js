@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { AuthhContext } from "../../AuthhContext";
+import { AuthContext } from "../../AuthContext";
 
 function EmployeePage() {
-  const { user } = useContext(AuthhContext);
+  const { user } = useContext(AuthContext);
 
   return user ? (
     <div>EmployeePage and the user is {user.name} </div>

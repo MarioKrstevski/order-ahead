@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link, Router } from "@reach/router";
+
 import "./App.css";
 import styled from "styled-components";
+
 import Login from "./scenes/Login/Login";
 import OwnerPage from "./scenes/OwnerPage/OwnerPage";
 import EmployeePage from "./scenes/EmployeePage/EmployeePage";
 
-import { AuthContext, AuthProvider } from "./AuthContext";
-import { AuthhContext } from "./AuthhContext";
+import { AuthContext } from "./AuthContext";
 
 const AppWrapper = styled.div`
   text-align: center;
@@ -41,24 +42,20 @@ const MainMenu = () => {
       <Link to="/login">
         <button>Login</button>
       </Link>
-      {/* <Link to="/profile">
-      <button>Profile</button>
-    </Link>
-    <Link to="/admin">
-      <button>Admin</button>
-    </Link> */}
     </div>
   );
 };
 
 const NotFound = () => <p>Sorry, nothing here</p>;
+
 export default function App() {
+  
   const [user, setUser] = useState(null);
   console.log("[App.js]  USER from CONTEXT:", user);
 
   return (
     <AppWrapper>
-      <AuthhContext.Provider value={{ user, setUser }}>
+      <AuthContext.Provider value={{ user, setUser }}>
         <Header>
           <h1>Welcome to React</h1>
           <MainMenu />
@@ -71,8 +68,7 @@ export default function App() {
             <NotFound default />
           </Router>
         </RouteView>
-      </AuthhContext.Provider>
+      </AuthContext.Provider>
     </AppWrapper>
   );
 }
-
