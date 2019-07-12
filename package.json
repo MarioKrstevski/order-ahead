@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:server": "cd order-ahead-node-server && nodemon server.js --exec babel-node --presets es2015,stage-0",
+    "start": "cd order-ahead-node-server && nodemon server.js --exec babel-node --presets es2015,stage-0",
     "start:client": "cd order-ahead-frontend && npm start start",
     "start:dev": "concurrently \"npm start:server\" \"npm start:client\""
   },
@@ -27,6 +27,7 @@
     "body-parser": "^1.19.0",
     "concurrently": "^4.1.1",
     "express": "^4.17.1",
+    "logger": "0.0.1",
     "mongoose": "^5.6.4",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"

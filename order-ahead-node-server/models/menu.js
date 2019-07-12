@@ -1,6 +1,5 @@
-import foodItem from "./foodItem";
-
-var mongoose = require("mongoose");
+// var mongoose = require("mongoose");
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 // create new instance of the mongoose.schema. the schema takes an
@@ -8,7 +7,7 @@ const Schema = mongoose.Schema;
 // const MenusSchema = new Schema(
 //     {
 //         restaurants: [
-    
+
 //           {
 //             name: "Forza",
 //             ordersNumber: 6,
