@@ -41,9 +41,9 @@ function Login() {
     if (response.token) {
       setIsAuthenticated(true);
       setUser({
-        name: "Peter Klaven",
+        name: response.name,
         token: response.token,
-        role: "employee",
+        role: response.role,
         isAuthenticated: true
       });
       navigate("/dailymenu");
