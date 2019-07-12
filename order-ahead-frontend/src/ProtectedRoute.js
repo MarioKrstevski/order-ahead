@@ -12,7 +12,7 @@ function ProtectedRoute({component:Component, prevLocation, allowed, authenticat
         user.isAuthenticated ?  window.history.back() : navigate('/') ;
     }
 
-    if(allowed.includes(user.role) || allowed.includes("all")){
+    if(allowed.includes("all") || allowed.includes(user.role)){
         return <Component {...rest} />
     } else {
         alert('You don\'t have access to that resource');
