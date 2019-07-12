@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 // object that shows the shape of your database entries.
 const OrdersSchema = new Schema(
   {
+    belongsTo: Number,
     orderId: Number,
     date: String,  
     restaurant: String,

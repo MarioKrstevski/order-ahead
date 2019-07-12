@@ -1,9 +1,9 @@
 export default {
   getDailyMenus: async () => {
-    return {
-      restaurants: [
+    return [
         {
-          name: "Forza",
+          restaurant: "Forza",
+          date: "23-04-2019",
           ordersNumber: 6,
           menu: [
             {
@@ -25,7 +25,8 @@ export default {
           shifts: ["11:00", "11:30"]
         },
         {
-          name: "Enriko",
+          restaurant: "Enriko",
+          date: "23-04-2019",  
           ordersNumber: 23,
           menu: [
             {
@@ -47,7 +48,6 @@ export default {
           shifts: ["10:30", "11:30"]
         }
       ]
-    };
   },
   getMyOrder: async () => {
     return {

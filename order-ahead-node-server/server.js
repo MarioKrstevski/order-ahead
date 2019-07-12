@@ -5,8 +5,11 @@ var mongoose = require("mongoose");
 var express = require("express");
 const getSecret = require('./secrets.js').getSecret;
 const Comment = require('./models/comment');
+const Order = require('./models/order');
+const DailyMenu = require('./models/dailyMenu');
+const config = require('./config.json');
 
-require('dotenv').config()
+// require('dotenv').config()
 
 
 // import { getSecret } from './secrets';
@@ -19,12 +22,17 @@ const router = express.Router();
 // import {config} from 'dotenv';
 
 
-// set our port to either a predetermined port number if you have set it up, or 3001
-const API_PORT = process.env.API_PORT || 3000;
 
+// set our port to either a predetermined port number if you have set it up, or 3030
+
+
+// const API_PORT = process.env.API_PORT || 3000;
+const API_PORT = config.port || 3050;
+const DB_URI = config.dbUri;
 // db config -- We are using mLab set your URI from mLab in secrets.js
 
-mongoose.connect(getSecret('dbUri'));
+// mongoose.connect(getSecret('dbUri'));
+mongoose.connect(DB_URI)
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -45,53 +53,89 @@ router.get('/comments', (req, res) => {
   });
 });
 
-router.post('/comments', (req, res) => {
-  const comment = new Comment();
-  // body parser lets us use the req.body
-  const { author, text } = req.body;
-  if (!author || !text) {
-    // we should throw an error. we can do this check on the front end
+// get Order if exists for loged in user for today's date ( default )
+router.get('/myorder', (req, res) => {
+  const { userId, dateRequested } = req.body;
+
+  if ( !userId || dateRequested){
     return res.json({
-      success: false,
-      error: 'You must provide an author and comment'
-    });
+      success:false,
+      error: ' You need to provide both fields '
+    })
   }
-  comment.author = author;
-  comment.text = text;
-  comment.save(err => {
+  Order.findOne({ 'belongsTo': userId, 'date': dateRequested },(err, myorder) => {
     if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
+
+    return res.json({ success: true, myorder });
   });
 });
 
-router.put('/comments/:commentId', (req, res) => {
-  console.log(req.params);
-  const { commentId } = req.params;
-  if (!commentId) {
-    return res.json({ success: false, error: 'No comment id provided' });
-  }
-  Comment.findById(commentId, (error, comment) => {
-    if (error) return res.json({ success: false, error });
-    const { author, text } = req.body;
-    if (author) comment.author = author;
-    if (text) comment.text = text;
-    comment.save(error => {
-      if (error) return res.json({ success: false, error });
-      return res.json({ success: true });
-    });
-  });
-});
 
-router.delete('/comments/:commentId', (req, res) => {
-  const { commentId } = req.params;
-  if (!commentId) {
-    return res.json({ success: false, error: 'No comment id provided' });
+router.get('/dailyMenus', (req, res) => {
+
+  const { dateRequested } = req.body;
+
+  if ( !date ){
+    return res.json({
+      success:false,
+      error: 'You need to provide date parametar'
+    })
   }
-  Comment.remove({ _id: commentId }, (error, comment) => {
-    if (error) return res.json({ success: false, error });
-    return res.json({ success: true });
-  });
-});
+
+  DailyMenu.find({'date': dateRequested}, (err, dailyMenus) => {
+    if (err) return res.json({ success: false, error: err });
+
+    return res.json({success: true, dailyMenus})
+  })
+})
+
+// router.post('/comments', (req, res) => {
+//   const comment = new Comment();
+//   // body parser lets us use the req.body
+//   const { author, text } = req.body;
+//   if (!author || !text) {
+//     // we should throw an error. we can do this check on the front end
+//     return res.json({
+//       success: false,
+//       error: 'You must provide an author and comment'
+//     });
+//   }
+//   comment.author = author;
+//   comment.text = text;
+//   comment.save(err => {
+//     if (err) return res.json({ success: false, error: err });
+//     return res.json({ success: true });
+//   });
+// });
+
+// router.put('/comments/:commentId', (req, res) => {
+//   console.log(req.params);
+//   const { commentId } = req.params;
+//   if (!commentId) {
+//     return res.json({ success: false, error: 'No comment id provided' });
+//   }
+//   Comment.findById(commentId, (error, comment) => {
+//     if (error) return res.json({ success: false, error });
+//     const { author, text } = req.body;
+//     if (author) comment.author = author;
+//     if (text) comment.text = text;
+//     comment.save(error => {
+//       if (error) return res.json({ success: false, error });
+//       return res.json({ success: true });
+//     });
+//   });
+// });
+
+// router.delete('/comments/:commentId', (req, res) => {
+//   const { commentId } = req.params;
+//   if (!commentId) {
+//     return res.json({ success: false, error: 'No comment id provided' });
+//   }
+//   Comment.remove({ _id: commentId }, (error, comment) => {
+//     if (error) return res.json({ success: false, error });
+//     return res.json({ success: true });
+//   });
+// });
 
 // Use our router configuration when we call /api
 app.use('/api', router);
