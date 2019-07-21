@@ -325,7 +325,6 @@ router.get("/dailyMenus", (req, res) => {
 
   DailyMenu.find({ date: dateRequested }, (err, dailyMenus) => {
     if (err) return res.json({ success: false, error: err });
-
     return res.json({ success: true, dailyMenus });
   });
 });
