@@ -58,14 +58,20 @@ export default gql`
 
 
     type Mutation {
-        makeOrder(foodName: String!, quantity: 1, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
+        makeOrder(foodName: String!, quantity: Int!, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
         cancelOrder(date: String!): Boolean
         updateOrder: Order
 
-        createDailyMenu(foods:[Food!]!, restaurantName: String, date: String): DailyMenu
-        updateDailyMenu(foods:[Food!]!:restaurantName: String, date: String): DailyMenu
+        createDailyMenu(foods:[foodInput!]!, restaurantName: String!, date: String!): DailyMenu
+        updateDailyMenu(foods:[foodInput!]!, restaurantName: String!, date: String!): DailyMenu
         addFood(foodname: String!, category: String!, price: Int!, restaurantName: String!): Food
         deleteFood(foodName: String!, restaurantName: String!): Food
         updateFood(foodName: String!, newFoodName: String!, newPrice: Int!, restaurantName: String!): Food
+    }
+
+    input foodInput {
+        name: String,
+        category: String,
+        price: Int
     }
 `;
