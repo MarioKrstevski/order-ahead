@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
-import { orders } from "./mockData";
-import {} from "./mockOwner";
+// import { orders } from "./mockData";
+// import {} from "./mockOwner";
 import { restaurants, order, dailyMenu, orders, menu } from "./mockNewData";
+import config from "./config.json";
 
+const DB_URI = config.dbUri;
 mongoose.connect(DB_URI, { useNewUrlParser: true });
 
 var db = mongoose.connection;
