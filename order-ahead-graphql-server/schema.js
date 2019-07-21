@@ -40,6 +40,7 @@ export default gql`
     type DailyMenu {
         food: [Food]
         restaurant: Restaurant
+        ordersNumber: Int
         date: String
     }
 
