@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import {} from "./mockData";
+import { orders } from "./mockData";
 import {} from "./mockOwner";
+import { restaurants, order, dailyMenu, orders, menu } from "./mockNewData";
 
 mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -9,13 +10,23 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export default {
   Query: {
-    getRestaurants: async (parent, {}, context, info) => {},
-    getOrder: async (parent, {}, context, info) => {},
+    getRestaurants: async (parent, {}, context, info) => {
+      return restaurants;
+    },
+    getOrder: async (parent, {}, context, info) => {
+      return order;
+    },
 
-    getDailyMenu: async (parent, {}, context, info) => {},
+    getDailyMenu: async (parent, {}, context, info) => {
+        return dailyMenu;
+    },
 
-    getOrders: async (parent, {}, context, info) => {},
-    getMenu: async (parent, {}, context, info) => {}
+    getOrders: async (parent, {}, context, info) => {
+        return orders;
+    },
+    getMenu: async (parent, {}, context, info) => {
+        return menu;
+    }
   },
   Mutation: {
     makeOrder: async (parent, {}, context, info) => {},
