@@ -23,6 +23,7 @@ export default gql`
         comment: String,
         foodChoice: Food,
         shift: String
+        user: String
     }
 
     type Food {
@@ -57,7 +58,7 @@ export default gql`
 
 
     type Mutation {
-        makeOrder(foodName: String!, quantity: 1, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!): Order
+        makeOrder(foodName: String!, quantity: 1, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
         cancelOrder(date: String!): Boolean
         updateOrder: Order
 
