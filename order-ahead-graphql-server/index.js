@@ -4,7 +4,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import cors from "cors";
 import {} from "./mockData";
-import {} from "./mockOwner";
+import { users } from "./mockData";
+
 
 import resolvers from "./resolvers";
 import typeDefs from "./schema";

@@ -68,14 +68,14 @@ export const orders = [
 ];
 
 export const menu = {
-  foods: [
+  food: [
     {
-      foodName: "Peperoni Pizza",
+      name: "Peperoni Pizza",
       category: "Pizza",
       price: 300
     },
     {
-      foodName: "Quatro Fromage",
+      name: "Quatro Fromage",
       category: "Pizza",
       price: 360
     }
