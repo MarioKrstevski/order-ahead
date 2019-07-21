@@ -21,7 +21,7 @@ export default gql`
         restaurant: Restaurant,
         atLocation: Boolean,
         comment: String,
-        foodChoice: Food,
+        food: Food,
         shift: String
         user: String
     }
@@ -43,6 +43,7 @@ export default gql`
         restaurant: Restaurant
         ordersNumber: Int
         date: String
+        shifts: [String!]
     }
 
     type Query {

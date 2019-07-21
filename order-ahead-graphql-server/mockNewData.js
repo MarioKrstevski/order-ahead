@@ -9,7 +9,11 @@ export const order = {
   restaurant: { name: "Forza", location: "Taftalidze" },
   atLocation: true,
   comment: "Povekje sirenje",
-  foodChoice: "Quatro Fromage",
+  food: {
+    category: "Salad",
+    name: "Quatro Fromage",
+    price: 360
+  },
   shift: "10:00"
 };
 
@@ -17,22 +21,25 @@ export const dailyMenu = {
   restaurant: { name: "Forza", location: "Taftalidze" },
   date: "23-04-2019",
   ordersNumber: 6,
-  menu: [
+  food: [
     {
       category: "Salad",
-      foodName: "Cezar Salata"
+      name: "Cezar Salata",
+      price: 140
     },
-    { category: "Breakfast", foodName: "Kinoa so Ovosje" },
+    { category: "Breakfast", name: "Kinoa so Ovosje", price: 140 },
     {
       category: "Meat/Fish",
-      foodName: "Pikanten pileski raznic so BBQ sos"
+      name: "Pikanten pileski raznic so BBQ sos",
+      price: 140
     },
     {
       category: "Vegeterian",
-      foodName: "Rizoto so vrganj i shampnjoni"
+      name: "Rizoto so vrganj i shampnjoni",
+      price: 140
     },
-    { category: "Pizza", foodName: "Peperoni Pizza" },
-    { category: "Pasta", foodName: "Njoki so 4 sirenja" }
+    { category: "Pizza", name: "Peperoni Pizza" ,price: 140},
+    { category: "Pasta", name: "Njoki so 4 sirenja" ,price: 140}
   ],
   shifts: ["11:00", "11:30"]
 };
