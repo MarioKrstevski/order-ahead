@@ -66,11 +66,18 @@ export default function App() {
   };
 
   const [user, setUser] = useState({
-    name: null,
-    token: null,
-    role: "visitor",
-    isAuthenticated: false
+    name: 'Mario',
+    token: '123456',
+    role: "employee",
+    isAuthenticated: true
   });
+
+  // name: null,
+  // token: null,
+  // role: "visitor",
+  // isAuthenticated: false
+
+
   console.log("[App.js]  USER from CONTEXT:", user);
 
   return (

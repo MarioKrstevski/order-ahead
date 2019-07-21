@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Form, Field, FormSpy } from "react-final-form";
 import createDecorator from "final-form-focus";
 
-import api from "./services/api";
+import api from "../../services/api";
 import { AuthContext } from "../../AuthContext";
 import { navigate } from "@reach/router";
 
