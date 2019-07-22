@@ -51,7 +51,11 @@ export const orders = [
     restaurant: { name: "Forza", location: "Taftalidze" },
     atLocation: true,
     comment: "Povekje sirenje",
-    foodChoice: "Quatro Fromage",
+    food: {
+      name: "Quatro Fromage",
+      category: "Pizza",
+      price: 360
+    },
     shift: "10:00",
     user: "Mario"
   },
@@ -61,7 +65,11 @@ export const orders = [
     restaurant: { name: "Forza", location: "Taftalidze" },
     atLocation: true,
     comment: "Povekje sirenje",
-    foodChoice: "Quatro Fromage",
+    food : {
+      name: "Quatro Fromage",
+      category: "Pizza",
+      price: 360
+    },
     shift: "10:00",
     user: "Mario"
   }
