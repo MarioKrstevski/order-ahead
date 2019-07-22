@@ -20,8 +20,9 @@ const AppWrapper = styled.div`
   display: grid;
   box-sizing: border-box;
   height: 100vh;
-  grid-template-rows: 150px 1fr;
-  border: 1px solid yellow;
+  grid-template-rows: max-content 1fr;
+  border: 1px solid y
+  ellow;
 `;
 const Header = styled.div`
   border: 1px solid greenyellow;
@@ -86,7 +87,6 @@ export default function App() {
               {({ location }) => (
         <AuthContext.Provider value={{ user, setUser }}>
           <Header>
-            <h1>Welcome to React</h1>
             <MainMenu logout={logout} />
           </Header>
           <RouteView>
