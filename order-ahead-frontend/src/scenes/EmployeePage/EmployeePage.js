@@ -1,53 +1,85 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
-import api from '../../services/api';
+import api from "../../services/api";
 
-import RestaurantPicker from './components/RestaurantPicker';
-import Menu from './components/Menu';
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+
+import RestaurantPicker from "./components/RestaurantPicker";
+import Menu from "./components/Menu";
+
+const GET_RESTAURANTS = gql`
+  query GET_RESTAURANTS {
+    getRestaurants {
+      name
+    }
+  }
+`;
+
+const GET_DAILY_MENU = gql`
+  query GET_DAILY_MENU($date: String!, $restaurant: String!) {
+    getDailyMenu(date: $date, restaurant: $restaurant) {
+      food {
+        name
+        category
+      }
+      restaurant {
+        name
+      }
+      ordersNumber
+      shifts
+    }
+  }
+`;
 
 function EmployeePage() {
   const { user } = useContext(AuthContext);
-  const [dailyMenus, setDailyMenus] = useState([])
-  const [menu, setMenu] = useState([])
-  const [selectedRestaurant, setSelectedRestaurant] = useState("Enriko");
+  const [dailyMenu, setDailyMenu] = useState(null);
+  const [menu, setMenu] = useState([]);
+  const [selectedRestaurant, setSelectedRestaurant] = useState("");
 
-  useEffect(()=> {
-    const getDailyMenus = async () => {
-      const response = await api.fetchDailyMenus();
-      console.log({response});
-      setDailyMenus(response);
-      setSelectedRestaurant("Forza");
-      let dailyMenu = dailyMenus.filter((menu) => menu.restaurant !== selectedRestaurant)
-      console.log('Daily Menu',dailyMenu)
-      setMenu(dailyMenu)
-      // console.log('[EmployyePage.js]',response);
-    };
-    getDailyMenus();
-    
-  
-    
-  },[])
+  return (
+    <Query query={GET_RESTAURANTS}>
+      {({ loading, error, data, refetch }) => {
+        if (loading) return "Loading restaurants...";
+        if (error) return `Error restaurants! ${error.message}`;
 
-  useEffect(()=>{
-    // let dailyMenu = dailyMenus.filter((menu) => {
-    //   console.log(menu.restaurant , selectedRestaurant)
-    //   return menu.restaurant === selectedRestaurant
-    // })
-    // setMenu(dailyMenu)
+        const firstRestaurant = data.getRestaurants[0].name;
+        const restaurants = data.getRestaurants.map((restaurant) => {
+          return restaurant.name
+        });
 
-    console.log('Menu', menu);
-  },[selectedRestaurant])
+        setSelectedRestaurant(firstRestaurant);
 
+        return (
+          <Query
+            query={GET_DAILY_MENU}
+            variables={{
+              restaurant: selectedRestaurant,
+              date: new Date().toISOString()
+            }}
+          >
+            {({ loading, error, data, refetch }) => {
+              if (loading) return "Loading daily menu...";
+              if (error) return `Error daily menu! ${error.message}`;
 
-  const restaurants = dailyMenus.map((menu) => {
-      return menu.restaurant;
-  })
+              console.log("DAILY MENU DATA :", data);
 
-  return(
-    <div>
-      <RestaurantPicker restaurants={restaurants} setSelectedRestaurant={setSelectedRestaurant}></RestaurantPicker>
-      <Menu menu={menu} selectedRestaurant={selectedRestaurant}></Menu>
-    </div>
-  )
+              return (
+                <>
+                  <RestaurantPicker
+                    restaurants={restaurants}
+                    setSelectedRestaurant={setSelectedRestaurant}
+                    refetch={refetch}
+                  />
+                  <Menu dailyMenu={data.getDailyMenu} selectedRestaurant={selectedRestaurant} />
+                </>
+              );
+            }}
+          </Query>
+        );
+      }}
+    </Query>
+  );
 }
 export default EmployeePage;
