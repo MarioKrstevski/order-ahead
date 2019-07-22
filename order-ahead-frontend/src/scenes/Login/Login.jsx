@@ -17,7 +17,7 @@ const FieldRow = styled.div`
   background-color: ${props => (props.active ? "lightcyan" : "white")};
 `;
 function Login() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(false);
 
   const { setUser } = useContext(AuthContext);
