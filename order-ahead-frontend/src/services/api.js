@@ -26,7 +26,7 @@ export default {
     return instance
       .get("/dailymenus")
       .then(res => {
-        console.log("Res DAta", res.data);
+        // console.log("/dailymenus fetch method data: ", res.data);
         return res.data;
       })
       .catch(err => {
