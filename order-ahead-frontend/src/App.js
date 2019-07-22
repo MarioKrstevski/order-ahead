@@ -21,8 +21,7 @@ const AppWrapper = styled.div`
   box-sizing: border-box;
   height: 100vh;
   grid-template-rows: max-content 1fr;
-  border: 1px solid y
-  ellow;
+  border: 1px solid yellow;
 `;
 const Header = styled.div`
   border: 1px solid greenyellow;
