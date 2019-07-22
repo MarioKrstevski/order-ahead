@@ -28,7 +28,6 @@ const Header = styled.div`
   background-color: #eee;
 `;
 const RouteView = styled.div`
-  background-color: #dfdfdf;
   & > * {
     height: 100%;
     box-sizing: border-box;
