@@ -1,18 +1,17 @@
 import React from 'react';
 
-function Menu({menu, selectedRestaurant}){
+function Menu({dailyMenu, selectedRestaurant}){
 
-    const foods = menu.map(food => {
-        return <div key={food.foodName}>
+    const foods = dailyMenu.food.map(food => {
+        return <div key={food.name}>
             <span>{food.category}</span>
-            <span>{food.foodName}</span>
-            <input type={"radio"} name={food.foodName} />
+            <span>{food.name}</span>
+            <input type={"radio"} name={food.name} />
         </div>
     })
     return (
         <div>
             <h2>{selectedRestaurant}</h2>
-
             {foods}
         </div>
     )
