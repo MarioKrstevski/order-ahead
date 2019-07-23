@@ -1,12 +1,12 @@
 export const restaurants = [
-  { name: "Forza", location: "Taftalidze" },
-  { name: "Enriko", location: "Leptokarija" }
+  { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
+  { name: "Enriko", location: "Leptokarija", orderMax: 30, telephone: '38977424565' }
 ];
 
 export const order = {
   orderId: 1,
   date: "23-04-2019-10-15",
-  restaurant: { name: "Forza", location: "Taftalidze" },
+  restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
   atLocation: true,
   comment: "Povekje sirenje",
   food: {
@@ -18,7 +18,7 @@ export const order = {
 };
 
 export const dailyMenu = {
-  restaurant: { name: "Forza", location: "Taftalidze" },
+  restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
   date: "23-04-2019",
   ordersNumber: 6,
   food: [
@@ -48,7 +48,7 @@ export const orders = [
   {
     orderId: 1,
     date: "23-04-2019-10-15",
-    restaurant: { name: "Forza", location: "Taftalidze" },
+    restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
     atLocation: true,
     comment: "Povekje sirenje",
     food: {
@@ -62,7 +62,7 @@ export const orders = [
   {
     orderId: 2,
     date: "23-04-2019-10-15",
-    restaurant: { name: "Forza", location: "Taftalidze" },
+    restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
     atLocation: true,
     comment: "Povekje sirenje",
     food : {
@@ -88,5 +88,5 @@ export const menu = {
       price: 360
     }
   ],
-  restaurant: { name: "Forza", location: "Taftalidze" }
+  restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },  
 };
