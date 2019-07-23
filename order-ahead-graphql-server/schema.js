@@ -5,6 +5,8 @@ export default gql`
     type Restaurant {
         name: String!
         location: String!
+        orderMax: Int!
+        telephone: String!
     }
 
     type User {
