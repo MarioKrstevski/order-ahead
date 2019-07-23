@@ -45,6 +45,7 @@ function EmployeePage({ restaurantsQuery }) {
       />
       <OrderNotification ></OrderNotification>
       <Menu selectedRestaurant={selectedRestaurant} />
+      
     </>
   );
 }

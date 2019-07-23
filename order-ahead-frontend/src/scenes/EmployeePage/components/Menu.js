@@ -3,6 +3,11 @@ import React from 'react';
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo-hooks";
 
+import styled from 'styled-components';
+
+const MenuWrapper = styled.div`
+
+`;
 
 const GET_DAILY_MENU = gql`
   query GET_DAILY_MENU($date: String!, $restaurant: String!) {
@@ -19,6 +24,16 @@ const GET_DAILY_MENU = gql`
     }
   }
 `;
+
+function RestaurantInformation(){
+  return "Info"
+}
+function MenuItems({foods}){
+  return foods
+}
+function OrderDetails(){
+  return "hey"
+}
 
 function Menu({selectedRestaurant}){
 
@@ -41,10 +56,12 @@ function Menu({selectedRestaurant}){
     })
 
     return (
-        <div>
-            <h2>{selectedRestaurant}</h2>
-            {foods}
-        </div>
+        <MenuWrapper>
+            <RestaurantInformation></RestaurantInformation>
+            <MenuItems foods={foods}></MenuItems>
+            <OrderDetails></OrderDetails>
+           
+        </MenuWrapper>
     )
 }
 
