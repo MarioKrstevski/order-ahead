@@ -1,6 +1,7 @@
 import React, { useContext, useState, useMemo, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import api from "../../services/api";
+import styled from 'styled-components';
 
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
@@ -8,7 +9,15 @@ import { useQuery } from "react-apollo-hooks";
 
 import RestaurantPicker from "./components/RestaurantPicker";
 import OrderNotification from './components/OrderNotification';
+import OrderDetails from './components/OrderDetails';
 import Menu from "./components/Menu";
+
+const FlexboxWrapper = styled.div`
+  display: flex;
+  flex-wrap:nowrap;
+   /* justify-content:space-between; */
+`
+
 
 const GET_RESTAURANTS = gql`
   query GET_RESTAURANTS {
@@ -43,8 +52,13 @@ function EmployeePage({ restaurantsQuery }) {
         selectedRestaurant={selectedRestaurant}
         setSelectedRestaurant={setSelectedRestaurant}
       />
-      <OrderNotification ></OrderNotification>
-      <Menu selectedRestaurant={selectedRestaurant} />
+
+      { order &&  <OrderNotification /> }
+
+      <FlexboxWrapper>
+        <Menu selectedRestaurant={selectedRestaurant} order={order}/>
+        { !order && <OrderDetails />}
+      </FlexboxWrapper>
       
     </>
   );
