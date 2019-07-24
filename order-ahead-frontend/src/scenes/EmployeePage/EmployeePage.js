@@ -28,7 +28,6 @@ const GET_RESTAURANTS = gql`
 `;
 
 function EmployeePage({ restaurantsQuery }) {
-  const { user } = useContext(AuthContext);
   const [selectedRestaurant, setSelectedRestaurant] = useState("");
   const [order, setOrder] = useState(null)
 
@@ -56,8 +55,8 @@ function EmployeePage({ restaurantsQuery }) {
       { order &&  <OrderNotification /> }
 
       <FlexboxWrapper>
-        <Menu selectedRestaurant={selectedRestaurant} order={order}/>
-        { !order && <OrderDetails />}
+        <Menu selectedRestaurant={selectedRestaurant} order={order} setOrder={setOrder}/>
+        { order && <OrderDetails order={order} setOrder={setOrder}  />}
       </FlexboxWrapper>
       
     </>

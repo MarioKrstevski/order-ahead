@@ -7,23 +7,23 @@ import { useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
 
 const MenuWrapper = styled.div`
- position: relative;
+  position: relative;
   min-width: fit-content;
   width: 100%;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   height: 100%;
   text-align: left;
 `;
 const H3 = styled.h3`
-  margin: 0;
+  margin: 10px 0;
+  padding-bottom: 8px;
   padding-left: 30px;
-  margin-bottom: 10px;
   border-bottom: 1px solid black;
 `;
 const InformationWrapper = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   text-align: left;
-  padding-left: 20px;
+  padding-left: 50px;
   margin: 10px 0;
   & span {
     color: #4985bd;
@@ -31,59 +31,61 @@ const InformationWrapper = styled.div`
 `;
 const FoodListContainer = styled.div`
   height: 100%;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   & > div:nth-child(even) {
     background-color: #e5e5e5;
   }
 `;
 const FoodItem = styled.div`
-  height: 45px;
+  font-size: 19px;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  height: 34px;
   padding-left: 20px;
   align-items: center;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  &>*{
-    border: 1px solid pink;
+  & > * {
+    /* border: 1px solid pink; */
   }
 
-  .category{
-    min-width:25%;
+  .category {
+    min-width: 25%;
     min-width: 110px;
     padding-left: 10px;
   }
 `;
 
 const OtherDetailsWrapper = styled.div`
-padding-left: 20px;
-  &>*{
-    margin-bottom:5px;
+  padding-left: 20px;
+  & > * {
+    margin-bottom: 5px;
   }
-  span{
+  span {
     display: inline-block;
     min-width: 100px;
   }
-  input{
+  input {
     display: inline;
   }
-  .textareaContainer{
-    display:flex;
+  .textareaContainer {
+    display: flex;
     align-items: top;
   }
-`
+`;
 
 const OrderButton = styled.button`
   position: absolute;
   background-color: #6c8ab4;
-  right: 30px;
-  bottom: 50px;
-  padding: 12px 20px ;
+  left: 380px;
+  bottom: 70px;
+  padding: 12px 20px;
   border: none;
   outline: none;
   border-radius: 3px;
   color: white;
 
-  &:active{
+  &:active {
     background-color: #527cb6;
   }
 `;
@@ -123,9 +125,9 @@ function RestaurantInformation({
     telephone.slice(8, 11);
   return (
     <InformationWrapper>
-      {ordersNumber}/{orderMax} people have ordered today at {restaurant} today.{" "}
+      {ordersNumber}/{orderMax} people have ordered today at {restaurant} today.
       <br />
-      For questions and aditional requests call {restaurant} at{" "}
+      For questions and aditional requests call {restaurant} at
       <span> {number} </span>
     </InformationWrapper>
   );
@@ -143,29 +145,59 @@ function MenuItems({ foods }) {
   return <FoodListContainer>{foodList}</FoodListContainer>;
 }
 
-function OtherDetails({restaurant}){
+function OtherDetails({ restaurant }) {
   const { user } = useContext(AuthContext);
-  return <OtherDetailsWrapper>
-      <div><span>Who:</span> {user.name} </div>
-      <div><span>Date:</span> {new Date().toLocaleDateString()}</div>
-      <div><span>Location:</span>
+  return (
+    <OtherDetailsWrapper>
+      <div>
+        <span>Who:</span> {user.name}{" "}
+      </div>
+      <div>
+        <span>Date:</span> {new Date().toLocaleDateString()}
+      </div>
+      <div>
+        <span>Location:</span>
         <input type="radio" name="location" defaultChecked /> {restaurant}
         <input type="radio" name="location" /> take-away
       </div>
-      <div className="textareaContainer"><span>Comment:</span> 
-            <textarea rows="3" cols="24" ></textarea>
+      <div>
+        <span>Shift:</span>
+        <input type="radio" name="shift" defaultChecked /> 10:00
+        <input type="radio" name="shift" /> 10:30
       </div>
-
-  </OtherDetailsWrapper>
+      <div className="textareaContainer">
+        <span>Comment:</span>
+        <textarea rows="4" cols="30" />
+      </div>
+    </OtherDetailsWrapper>
+  );
 }
 
-function Menu({ selectedRestaurant, order }) {
+function Menu({ selectedRestaurant, order, setOrder }) {
   const { data, loading, error, refetch } = useQuery(GET_DAILY_MENU, {
     variables: {
       restaurant: selectedRestaurant,
       date: Date().toString()
     }
   });
+
+  const handleOrder = () => {
+    setOrder({
+      orderId: 5,
+      date: "27-7-2019",
+      restaurant: {
+        name: "Forza"
+      },
+      atLocation: true,
+      comment: "Add more cheese",
+      food: {
+        category: "Pizza",
+        name: "Capriciozza"
+      },
+      shift: "10:00",
+      user: "Mario"
+    });
+  };
 
   if (loading) return "Loading daily menu...";
   if (error) return `Error daily menu! ${error.message}`;
@@ -184,13 +216,11 @@ function Menu({ selectedRestaurant, order }) {
       <MenuItems foods={foods} />
 
       <H3>Details</H3>
-      <OtherDetails restaurant={data.getDailyMenu.restaurant.name}/>
+      <OtherDetails restaurant={data.getDailyMenu.restaurant.name} />
 
-      
-      <OrderButton>
-        {order ? 'Update Order' : 'Order'}
+      <OrderButton onClick={handleOrder}>
+        {order ? "Update Order" : "Order"}
       </OrderButton>
-
     </MenuWrapper>
   );
 }

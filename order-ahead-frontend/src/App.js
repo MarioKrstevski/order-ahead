@@ -21,17 +21,17 @@ const AppWrapper = styled.div`
   box-sizing: border-box;
   height: 100vh;
   grid-template-rows: max-content 1fr;
-  border: 1px solid yellow;
+  /* border: 1px solid yellow; */
 `;
 const Header = styled.div`
-  border: 1px solid greenyellow;
+  /* border: 1px solid greenyellow; */
   background-color: #eee;
 `;
 const RouteView = styled.div`
   & > * {
     height: 100%;
     box-sizing: border-box;
-    border: 1px solid black;
+    /* border: 1px solid black; */
   }
 `;
 
