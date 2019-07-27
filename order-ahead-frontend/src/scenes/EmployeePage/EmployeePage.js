@@ -61,8 +61,6 @@ function EmployeePage() {
   useEffect(() => {
     data && setSelectedRestaurant(data.getRestaurants[0].name);
     orderQuery.data && setOrder(orderQuery.data.getOrder);
-
-    console.log('Order data', orderQuery)
   }, [data, order])
 
   if (loading) return "Loading restaurants...";
