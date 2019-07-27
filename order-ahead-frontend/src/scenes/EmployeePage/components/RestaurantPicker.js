@@ -33,10 +33,12 @@ const HeaderWrapper = styled.div`
 function RestaurantPicker({
   restaurants,
   selectedRestaurant,
-  setSelectedRestaurant
+  setSelectedRestaurant,
 }) {
+
   const buttons = restaurants.map(restaurant => {
     const selected = restaurant === selectedRestaurant ? true : false;
+
     return (
       <Button
         selected={selected}

@@ -6,25 +6,30 @@ const OrderNotificationContent = styled.div`
   overflow: auto;
   margin-top: 7px;
   margin-bottom: 7px;
-  display:block;
+  display: block;
   text-align: left;
-  
-  &>div {
+
+  & > div {
     float: right;
     padding: 8px 25px;
     background-color: #39d289;
     color: white;
-    width:95%;
+    width: 95%;
   }
 `;
 
-function OrderNotification() {
+function OrderNotification({ orderQuery }) {
+  const { data, loading, error } = orderQuery;
+
+  if (loading) return "Loading order...";
+  if (error) return `Error order! ${error.message}`;
+
   return (
     <OrderNotificationContent>
-    <div>
+      <div>
         Your order was successfully placed. <br />
         Have a nice meal. Note that you can change the order until 10:00 today.
-    </div>
+      </div>
     </OrderNotificationContent>
   );
 }

@@ -173,7 +173,7 @@ function OtherDetails({ restaurant }) {
   );
 }
 
-function Menu({ selectedRestaurant, order, setOrder }) {
+function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
   const { data, loading, error, refetch } = useQuery(GET_DAILY_MENU, {
     variables: {
       restaurant: selectedRestaurant,
@@ -182,21 +182,24 @@ function Menu({ selectedRestaurant, order, setOrder }) {
   });
 
   const handleOrder = () => {
-    setOrder({
-      orderId: 5,
-      date: "27-7-2019",
-      restaurant: {
-        name: "Forza"
-      },
-      atLocation: true,
-      comment: "Add more cheese",
-      food: {
-        category: "Pizza",
-        name: "Capriciozza"
-      },
-      shift: "10:00",
-      user: "Mario"
-    });
+    // setOrder({
+    //   orderId: 5,
+    //   date: "27-7-2019",
+    //   restaurant: {
+    //     name: "Forza"
+    //   },
+    //   atLocation: true,
+    //   comment: "Add more cheese",
+    //   food: {
+    //     category: "Pizza",
+    //     name: "Capriciozza"
+    //   },
+    //   shift: "10:00",
+    //   user: "Mario"
+    // });
+    setOrder(null);
+    refetchOrder({date: "hehe",
+    username: "hehe"})
   };
 
   if (loading) return "Loading daily menu...";

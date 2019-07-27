@@ -34,9 +34,14 @@ const CancelButton = styled.button`
   }
 `;
 
-function OrderDetails({ order, setOrder }) {
+function OrderDetails({ order, setOrder , refetch}) {
   const handleCancel = () => {
     setOrder(null);
+    refetch({
+      date: "hehe",
+      username: "hehe"
+    });
+    console.log('this happens')
   };
   const {
     orderId,

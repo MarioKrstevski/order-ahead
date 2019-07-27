@@ -27,15 +27,43 @@ const GET_RESTAURANTS = gql`
   }
 `;
 
-function EmployeePage({ restaurantsQuery }) {
+const GET_ORDER = gql`
+  query GET_ORDER($username: String!, $date: String!){
+    getOrder(username: $username, date: $date){
+      orderId
+      date
+      restaurant {
+        name
+      }
+      atLocation
+      comment
+      food {
+        name
+      }
+      shift
+      user
+    }
+  }
+`
+
+function EmployeePage() {
   const [selectedRestaurant, setSelectedRestaurant] = useState("");
   const [order, setOrder] = useState(null)
 
+  const orderQuery = useQuery(GET_ORDER, {
+    variables: {
+      date: "hehe",
+      username: "hehe"
+    }
+  })
   const { data, error, loading } = useQuery(GET_RESTAURANTS);
 
   useEffect(() => {
     data && setSelectedRestaurant(data.getRestaurants[0].name);
-  }, [data])
+    orderQuery.data && setOrder(orderQuery.data.getOrder);
+
+    console.log('Order data', orderQuery)
+  }, [data, order])
 
   if (loading) return "Loading restaurants...";
   if (error) return `Error restaurants! ${error.message}`;
@@ -52,11 +80,11 @@ function EmployeePage({ restaurantsQuery }) {
         setSelectedRestaurant={setSelectedRestaurant}
       />
 
-      { order &&  <OrderNotification /> }
+      { order &&  <OrderNotification orderQuery={orderQuery} /> }
 
       <FlexboxWrapper>
-        <Menu selectedRestaurant={selectedRestaurant} order={order} setOrder={setOrder}/>
-        { order && <OrderDetails order={order} setOrder={setOrder}  />}
+        <Menu selectedRestaurant={selectedRestaurant} order={order} setOrder={setOrder} refetch={orderQuery.refetch}/>
+        { order && <OrderDetails order={order} setOrder={setOrder} refetch={orderQuery.refetch} />}
       </FlexboxWrapper>
       
     </>
