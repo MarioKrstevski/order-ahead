@@ -14,7 +14,8 @@ export const order = {
     name: "Quatro Fromage",
     price: 360
   },
-  shift: "10:00"
+  shift: "10:00",
+  user: "Mario"
 };
 
 export const dailyMenu = {
