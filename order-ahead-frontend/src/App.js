@@ -39,10 +39,10 @@ const MainMenu = ({ logout }) => {
   return (
     <div>
       <Link to="/foods">
-        <button>Home</button>
+        <button>Owner</button>
       </Link>
       <Link to="/dailymenu">
-        <button>Company Lunch</button>
+        <button>Employee</button>
       </Link>
       <Link to="/login">
         <button>Login</button>
