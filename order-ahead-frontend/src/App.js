@@ -63,11 +63,10 @@ export default function App() {
       isAuthenticated: false
     });
   };
-
   const [user, setUser] = useState({
-    name: 'Mario',
-    token: '123456',
-    role: "employee",
+    name: "Stefan",
+    token: '12345678',
+    role: "owner",
     isAuthenticated: true
   });
 
