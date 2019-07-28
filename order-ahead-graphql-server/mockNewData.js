@@ -5,7 +5,7 @@ export const restaurants = [
 
 export const order = {
   orderId: 1,
-  date: "23-04-2019-10-15",
+  date: "27-7-2019",
   restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
   atLocation: true,
   comment: "Povekje sirenje",
