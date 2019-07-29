@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import "./App.css";
 import styled from "styled-components";
+import notFoundImage from './resources/404.png';
 
 import Login from "./scenes/Login/Login";
 import OwnerPage from "./scenes/OwnerPage/OwnerPage";
@@ -75,7 +76,7 @@ const MainMenu = ({ logout }) => {
 const NotFound = () => (
   <NotFoundContainer>
     <div>
-      <img src={require("./resources/404.png")} alt="404" />
+      <img src={notFoundImage} alt="404" />
     </div>
     <h2> Caution! This Page is Cordoned Off</h2>
     <p>
