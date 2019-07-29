@@ -101,6 +101,7 @@ export default function App() {
     name: "Stefan",
     token: "12345678",
     role: "owner",
+    restaurant: "Forza",
     isAuthenticated: true
   });
 
