@@ -62,17 +62,31 @@ export const orders = [
   },
   {
     orderId: 2,
-    date: "23-04-2019-10-15",
+    date: "23-04-2019-10-52",
     restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
     atLocation: true,
-    comment: "Povekje sirenje",
+    comment: "4 jajca ",
     food : {
-      name: "Quatro Fromage",
-      category: "Pizza",
-      price: 360
+      name: "Omlet",
+      category: "Breakfast",
+      price: 120
     },
     shift: "10:00",
-    user: "Mario"
+    user: "Stole"
+  },
+  {
+    orderId: 3,
+    date: "23-04-2019-10-22",
+    restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
+    atLocation: true,
+    comment: "Povekje pechena sakam da e ",
+    food : {
+      name: "Cappricioza",
+      category: "Pizza",
+      price: 320
+    },
+    shift: "10:00",
+    user: "Stole"
   }
 ];
 
