@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  Link,
-  Router,
-  Location
-} from "@reach/router";
+import { Link, Router, Location } from "@reach/router";
 import ProtectedRoute from "./ProtectedRoute";
 
 import "./App.css";
@@ -34,6 +30,30 @@ const RouteView = styled.div`
     /* border: 1px solid black; */
   }
 `;
+const NotFoundContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // horizontal alignment
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  color: #965418;
+  background-color: #83D9C8;
+
+  img {
+    width: 36%;
+    height: 320px;
+    background-size: cover;
+  }
+
+  h2{
+    margin-top:0;
+  }
+  p {
+    padding: 0 20%;
+  }
+`;
 
 const MainMenu = ({ logout }) => {
   return (
@@ -52,7 +72,21 @@ const MainMenu = ({ logout }) => {
   );
 };
 
-const NotFound = () => <p>Sorry, nothing here</p>;
+const NotFound = () => (
+  <NotFoundContainer>
+    <div>
+      <img src={require("./resources/404.png")} alt="404" />
+    </div>
+    <h2> Caution! This Page is Cordoned Off</h2>
+    <p>
+      The earthquake was not good to the bike lane on your way to work. A large
+      gap in the pavement (too big to be called a pothole) had swallowed three
+      oblivious bikers whole. So the city had put up two pylons and yellow
+      caution tape. Pretty frustrating for you given your propensity to do 360
+      jumps over the gap.
+    </p>
+  </NotFoundContainer>
+);
 
 export default function App() {
   const logout = () => {
@@ -65,7 +99,7 @@ export default function App() {
   };
   const [user, setUser] = useState({
     name: "Stefan",
-    token: '12345678',
+    token: "12345678",
     role: "owner",
     isAuthenticated: true
   });
@@ -75,46 +109,45 @@ export default function App() {
   // role: "visitor",
   // isAuthenticated: false
 
-
   console.log("[App.js]  USER from CONTEXT:", user);
 
   return (
     <AppWrapper>
-            <Location>
-              {({ location }) => (
-        <AuthContext.Provider value={{ user, setUser }}>
-          <Header>
-            <MainMenu logout={logout} />
-          </Header>
-          <RouteView>
-                <Router>
-                  <ProtectedRoute
-                    path="/dailymenu"
-                    component={EmployeePage}
-                    allowed={["employee"]}
-                    authenticatedOnly
-                    prevLocation={location}
-                  />
-                  <ProtectedRoute
-                    path="/"
-                    component={Login}
-                    allowed={["all"]}
-                    authenticatedOnly={false}
-                    prevLocation={location}
-                  />
-                  <ProtectedRoute
-                    path="/foods"
-                    component={OwnerPage}
-                    allowed={["owner"]}
-                    authenticatedOnly
-                    prevLocation={location}
-                  />
-                  <NotFound default />
-                </Router>
-          </RouteView>
-        </AuthContext.Provider>
-              )}
-            </Location>
+      <Location>
+        {({ location }) => (
+          <AuthContext.Provider value={{ user, setUser }}>
+            <Header>
+              <MainMenu logout={logout} />
+            </Header>
+            <RouteView>
+              <Router>
+                <ProtectedRoute
+                  path="/dailymenu"
+                  component={EmployeePage}
+                  allowed={["employee"]}
+                  authenticatedOnly
+                  prevLocation={location}
+                />
+                <ProtectedRoute
+                  path="/"
+                  component={Login}
+                  allowed={["all"]}
+                  authenticatedOnly={false}
+                  prevLocation={location}
+                />
+                <ProtectedRoute
+                  path="/foods"
+                  component={OwnerPage}
+                  allowed={["owner"]}
+                  authenticatedOnly
+                  prevLocation={location}
+                />
+                <NotFound default />
+              </Router>
+            </RouteView>
+          </AuthContext.Provider>
+        )}
+      </Location>
     </AppWrapper>
   );
 }
