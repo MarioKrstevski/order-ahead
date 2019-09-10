@@ -93,14 +93,99 @@ export const orders = [
 export const menu = {
   food: [
     {
-      name: "Peperoni Pizza",
+      name: "Forza Pizza",
       category: "Pizza",
       price: 300
     },
     {
-      name: "Quatro Fromage",
+      name: "Domashna",
       category: "Pizza",
+      price: 320
+    },
+    {
+      name: "Salami",
+      category: "Pizza",
+      price: 310
+    },
+    {
+      name: "Capricciosa",
+      category: "Pizza",
+      price: 340
+    },
+    {
+      name: "Grass From Yard",
+      category: "Vegeterian",
+      price: 350
+    },
+    {
+      name: "Fruit Salad",
+      category: "Vegeterian",
       price: 360
+    },
+    {
+      name: "Avocado Storm",
+      category: "Vegeterian",
+      price: 700
+    },
+    {
+      name: "Spagetti Quator Formage",
+      category: "Pasta",
+      price: 100
+    },
+    {
+      name: "Njoki Bailico",
+      category: "Pasta",
+      price: 220
+    },
+    {
+      name: "Njoki Quatro Fromage",
+      category: "Pasta",
+      price: 210
+    },
+    {
+      name: "Carbonara Spagetti",
+      category: "Pasta",
+      price: 240
+    },
+    {
+      name: "Turbo Wakeup",
+      category: "Breakfast",
+      price: 250
+    },
+    {
+      name: "Ribs",
+      category: "Meat/Fish",
+      price: 260
+    },
+    {
+      name: "Steak with fries",
+      category: "Meat/Fish",
+      price: 111
+    },
+    {
+      name: "Salmon",
+      category: "Meat/Fish",
+      price: 1112
+    },
+    {
+      name: "Kremenadla",
+      category: "Meat/Fish",
+      price: 112
+    },
+    {
+      name: "Caesar",
+      category: "Salad",
+      price: 434
+    },
+     {
+      name: "Macedonian Salad",
+      category: "Salad",
+      price: 424
+    },
+    {
+      name: "Small Breakfast",
+      category: "Breakfast",
+      price: 444
     }
   ],
   restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },  

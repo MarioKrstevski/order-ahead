@@ -102,8 +102,6 @@ const GET_DAILY_MENU = gql`
         orderMax
         telephone
       }
-      ordersNumber
-      shifts
     }
   }
 `;

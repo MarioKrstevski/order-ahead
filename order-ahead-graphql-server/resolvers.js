@@ -26,7 +26,8 @@ export default {
     getOrders: async (parent, {}, context, info) => {
         return orders;
     },
-    getMenu: async (parent, {}, context, info) => {
+    getMenu: async (parent, {restaurant}, context, info) => {
+        console.log('Ive been hit', restaurant)
         return menu;
     }
   },

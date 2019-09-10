@@ -44,7 +44,8 @@ function Login() {
         name: response.name,
         token: response.token,
         role: response.role,
-        isAuthenticated: true
+        isAuthenticated: true,
+        restaurant: response.restaurant,
       });
       navigate("/dailymenu");
     } else {

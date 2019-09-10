@@ -55,6 +55,7 @@ export const users = [{
     password:"stefanabc",
     name: "Stefan",
     token: '12345678',
+    restaurant: "Forza",
     role: "owner",
   },{
     username:"admin@order.com",
