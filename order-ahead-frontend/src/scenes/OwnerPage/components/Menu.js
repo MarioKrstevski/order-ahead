@@ -14,8 +14,8 @@ const MenuWrapper = styled.div`
 `;
 
 const GET_MENU = gql`
-  query GET_MENU($restaurant: String!) {
-    getMenu(restaurant: $restaurant) {
+query GET_MENU($restaurant: String!, $date: String!) {
+  getMenu(restaurant: $restaurant, date: $date) {
       food {
         name
         category
@@ -53,10 +53,13 @@ const Category = styled.div`
 
 function Menu() {
   const { user } = useContext(AuthContext);
+  const today = new Date().toDateString();
+
 
   const { data, loading, error, refetch } = useQuery(GET_MENU, {
     variables: {
-      restaurant: user.restaurant || "Forza"
+      restaurant: user.restaurant || "Forza",
+      date: today + 'Menu - OwnerPage'
     }
   });
 
@@ -65,11 +68,10 @@ function Menu() {
 
   console.log("[MenuOwner]:", data);
 
-  const foodItems = data.getMenu.food;
 
   const categorySorted = {};
 
-  foodItems.forEach(food => {
+  data.getMenu.food.forEach(food => {
     if (!categorySorted.hasOwnProperty(food.category)) {
       categorySorted[food.category] = [];
     }
@@ -85,7 +87,7 @@ function Menu() {
           {categorySorted[category].map(food => {
             return (
               <FoodItem key={food.name}>
-                <span class={"food-price"}> ${food.price} </span>
+                <span className={"food-price"}> ${food.price} </span>
                 {" --- "}&nbsp;
                 {food.name}
               </FoodItem>

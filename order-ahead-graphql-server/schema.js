@@ -55,7 +55,7 @@ export default gql`
         getDailyMenu(date: String!, restaurant: String!): DailyMenu
 
         getOrders(date: String!, restaurant: String!): [Order]
-        getMenu(restaurant: String!): Menu
+        getMenu(date: String!, restaurant: String!): Menu
     }
 
 

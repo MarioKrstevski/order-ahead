@@ -28,9 +28,29 @@ const OrderButton = styled.button`
   }
 `;
 
+const FoodItem = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  list-style-type: circle;
+
+  div {
+    margin-left: 6px;
+  }
+`;
+const Type = styled.h2`
+  padding: 2px 20px;
+  border-bottom: 0.5px solid darkgray;
+`;
+
+const Category = styled.div`
+  text-align: left;
+`;
+
+
 const GET_MENU = gql`
-  query GET_MENU($restaurant: String!) {
-    getMenu(restaurant: $restaurant) {
+  query GET_MENU($restaurant: String!, $date: String!) {
+    getMenu(restaurant: $restaurant, date: $date) {
       food {
         name
         category
@@ -54,49 +74,31 @@ const CREATE_DAILY_MENU = gql`
     createDailyMenu(foods: $foods, restaurant: $restaurant, date: $date)
   }
 `;
-const FoodItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-  list-style-type: circle;
-
-  div {
-    margin-left: 6px;
-  }
-`;
-const Type = styled.h2`
-  padding: 2px 20px;
-  border-bottom: 0.5px solid darkgray;
-`;
-
-const Category = styled.div`
-  text-align: left;
-`;
 
 function CreateMenu() {
   const { user } = useContext(AuthContext);
   const tomorrow = new Date().setDate(new Date().getDate() + 1);
-  const today = new Date();
+  const today = new Date().toDateString();
 
   const [selectedFoodItems, setSelectedFoodItems] = useState([]);
-
-  const { data, loading, error, refetch } = useQuery(GET_MENU, {
-    variables: {
-      restaurant: user.restaurant || "Forza",
-      today
-    }
-  });
-
   const [createDailyMenu, { loading: mutationLoading }] = useMutation(
     CREATE_DAILY_MENU,
     {
       variables: {
         restaurant: user.restaurant || "Forza",
-        tomorrow,
+        date: tomorrow,
         foods: selectedFoodItems
       }
     }
   );
+
+  const { data, loading, error, refetch } = useQuery(GET_MENU, {
+    variables: {
+      restaurant: user.restaurant || "Forza",
+      date: today + 'CreateMenu - OwnerPage'
+    }
+  });
+
 
   const clickHandler = () => {
     setSelectedFoodItems([
@@ -106,16 +108,16 @@ function CreateMenu() {
     createDailyMenu();
   };
 
+  // let loading,error,data;
+
   if (loading) return "Loading menu...";
   if (error) return `Error menu! ${error.message}`;
 
   console.log("[MenuOwner]:", data);
 
-  const foodItems = data.getMenu.food;
-
   const categorySorted = {};
 
-  foodItems.forEach(food => {
+  data.getMenu.food.forEach(food => {
     if (!categorySorted.hasOwnProperty(food.category)) {
       categorySorted[food.category] = [];
     }

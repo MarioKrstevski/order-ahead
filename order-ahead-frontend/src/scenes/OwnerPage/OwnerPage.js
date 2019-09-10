@@ -16,7 +16,7 @@ function OwnerPage() {
   const { user, restaurant } = useContext(AuthContext);
 
   return (
-    <Tabs defaultIndex={3}>
+    <Tabs defaultIndex={2}>
       <TabList>
         <Tab>Orders</Tab>
         <Tab>Daily Menu</Tab>
