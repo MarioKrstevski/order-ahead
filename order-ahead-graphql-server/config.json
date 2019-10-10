@@ -1,4 +1,4 @@
 {
     "port" : 3030,
-    "dbUri" : "mongodb+srv://macesmajli:smajli123@orderahead-laybl.mongodb.net/test?retryWrites=true&w=majority"
+    "dbUri" : "mongodb+srv://mariokrst:mario123@orderaheadcluster-rn9rp.mongodb.net/order-ahead?retryWrites=true&w=majority"
 } 

@@ -24,7 +24,7 @@ export default gql`
         atLocation: Boolean,
         comment: String,
         food: Food,
-        shift: String
+        shift: String,
         user: String
     }
 
@@ -35,6 +35,9 @@ export default gql`
         price: Int
     }
 
+    type Cat {
+        name: String!
+    }
     type Menu {
         food: [Food]
         restaurant: Restaurant
@@ -70,6 +73,8 @@ export default gql`
         addFood(foodname: String!, category: String!, price: Int!, restaurantName: String!): Food
         deleteFood(foodName: String!, restaurantName: String!): Food
         updateFood(foodName: String!, newFoodName: String!, newPrice: Int!, restaurantName: String!): Food
+
+        createCat(name: String!): Cat!
     }
 
     input foodInput {

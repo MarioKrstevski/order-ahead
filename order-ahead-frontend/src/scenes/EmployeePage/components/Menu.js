@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../../AuthContext";
 
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 
 import styled from "styled-components";
 
@@ -106,6 +106,14 @@ const GET_DAILY_MENU = gql`
   }
 `;
 
+const MAKE_ORDER = gql`
+  mutation MAKE_ORDER($foodName: String!, $quantity: Int!, $date: String!, $restaurantName: String!, $atLocation: Boolean!, $comment: String!, $shift: String!, $user: String!){
+    makeOrder(foodName:$foodName, quantity:$quantity, date:$date, restaurantName:$restaurantName, atLocation: $atLocation, comment: $comment, shift: $shift, user: $user  ){
+      user
+    }
+  }
+  `
+
 function RestaurantInformation({
   ordersNumber,
   restaurant,
@@ -179,22 +187,23 @@ function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
     }
   });
 
+  const [makeOrder, { data: makeOrderData }] = useMutation(MAKE_ORDER);
+
+
+
   const handleOrder = () => {
-    // setOrder({
-    //   orderId: 5,
-    //   date: "27-7-2019",
-    //   restaurant: {
-    //     name: "Forza"
-    //   },
-    //   atLocation: true,
-    //   comment: "Add more cheese",
-    //   food: {
-    //     category: "Pizza",
-    //     name: "Capriciozza"
-    //   },
-    //   shift: "10:00",
-    //   user: "Mario"
-    // });
+    
+    makeOrder({variables: {
+      foodName: "Cappricioza",
+       quantity: 5,
+        date: "2019-10-10-10-10",
+         restaurantName: "Forza",
+          atLocation: true,
+           comment: "Add ketchup",
+            shift: "10:00",
+             user: "Mario"
+    }})
+
     setOrder(null);
     refetchOrder({date: "hehe",
     username: "hehe"})
