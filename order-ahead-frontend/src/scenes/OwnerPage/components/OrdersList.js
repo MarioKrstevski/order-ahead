@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import moment from 'moment'
 
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo-hooks";
@@ -17,14 +18,12 @@ const OrderListWrapper = styled.div`
 const GET_ORDERS = gql`
   query GET_ORDERS($date: String!, $restaurant: String!) {
     getOrders(date: $date, restaurant: $restaurant) {
-      orderId
+      restaurantName
       atLocation
       comment
-      food {
-        name
-        category
-      }
+      foodName
       shift
+      user
     }
   }
 `;
@@ -42,8 +41,10 @@ function sortByCategory(a, b) {
 function OrdersList() {
   const { user } = useContext(AuthContext);
 
+  console.log("USER", user)
+
   console.log("Restaurant ", user.restaurant);
-  const today = new Date().toUTCString();
+  const today = moment().format("YYYY-M-D");
 
   const { data, loading, error } = useQuery(GET_ORDERS, {
     variables: {
@@ -109,7 +110,7 @@ function OrdersList() {
   return (
     <OrderListWrapper>
       <h1 style={{ maginLeft: 20 }}> All orders for today </h1>
-      {/* <ul>{formattedList}</ul> */}
+      <ul>{formattedList}</ul>
     </OrderListWrapper>
   );
 }

@@ -4,7 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import "./App.css";
 import styled from "styled-components";
-import notFoundImage from './resources/404.png';
+import notFoundImage from "./resources/404.png";
 
 import Login from "./scenes/Login/Login";
 import OwnerPage from "./scenes/OwnerPage/OwnerPage";
@@ -40,7 +40,7 @@ const NotFoundContainer = styled.div`
   height: 100%;
   box-sizing: border-box;
   color: #965418;
-  background-color: #83D9C8;
+  background-color: #83d9c8;
 
   img {
     width: 36%;
@@ -48,8 +48,8 @@ const NotFoundContainer = styled.div`
     background-size: cover;
   }
 
-  h2{
-    margin-top:0;
+  h2 {
+    margin-top: 0;
   }
   p {
     padding: 0 20%;
@@ -99,10 +99,10 @@ export default function App() {
     });
   };
   const [user, setUser] = useState({
-    name: "Mario",
+    name: "Stefan",
     token: "12345678",
-    role: "employee",
-    restaurant: null,
+    role: "owner",
+    restaurant: "Forza",
     isAuthenticated: true
   });
 
@@ -112,10 +112,16 @@ export default function App() {
   // restaurant: "Forza",
   // isAuthenticated: true
 
-    // password:"mario123",
-    // name: "Mario",
-    // token: 'abcdefgh',
-    // role: "employee",
+  // name: "Mario",
+  // token: "12345678",
+  // role: "employee",
+  // restaurant: null,
+  // isAuthenticated: true
+
+  // password:"mario123",
+  // name: "Mario",
+  // token: 'abcdefgh',
+  // role: "employee",
 
   // name: null,
   // token: null,
