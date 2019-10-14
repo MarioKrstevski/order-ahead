@@ -1,6 +1,6 @@
 export const restaurants = [
-  { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
-  { name: "Enriko", location: "Leptokarija", orderMax: 30, telephone: '38977424565' }
+  { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560', shifts:["10:00","10:30"] },
+  { name: "Enriko", location: "Leptokarija", orderMax: 30, telephone: '38977424565' ,shifts:["10:00","10:30","11:00"] }
 ];
 
 export const order = {

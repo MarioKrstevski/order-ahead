@@ -50,7 +50,7 @@ function RestaurantPicker({
     );
   });
   return <HeaderWrapper>
-   <span>Select Restauratns ===> Current restaurant is <b>{selectedRestaurant }</b>  </span>
+   <span>Select Restaurants: <b>{selectedRestaurant }</b>  </span>
    {buttons}
   </HeaderWrapper>;
 }

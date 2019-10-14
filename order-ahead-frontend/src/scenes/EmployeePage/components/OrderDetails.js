@@ -66,8 +66,8 @@ function OrderDetails({ order , refetchOrder}) {
   const [cancelOrder, { data }] = useMutation(CANCEL_ORDER);
   const { user } = useContext(AuthContext)
     const dateNow = moment().format("YYYY-M-D-HH-mm");
-  const handleCancel = () => {
-    cancelOrder({ variables : {
+  const handleCancel = async () => {
+    await cancelOrder({ variables : {
       date: dateNow,
       user: user.name
     }})

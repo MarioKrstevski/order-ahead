@@ -140,7 +140,7 @@ function RestaurantInformation({ ordersNumber, restaurant }) {
     </InformationWrapper>
   );
 }
-function MenuItems({ foods,selectedFood, selectFood }) {
+function MenuItems({ foods, selectedFood, selectFood }) {
   const onFoodChanged = (event, food) => {
     selectFood(food);
   };
@@ -162,7 +162,7 @@ function MenuItems({ foods,selectedFood, selectFood }) {
   return <FoodListContainer>{foodList}</FoodListContainer>;
 }
 
-function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
+function OtherDetails({ restaurant, shifts, selectedDetails, changeDetails }) {
   const { user, date, location, shiftTime } = selectedDetails;
 
   const handleChanges = e => {
@@ -187,7 +187,7 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
           defaultChecked={location === "onsight"}
           onChange={e => handleChanges(e)}
         />{" "}
-        {restaurant}
+        {restaurant.name}
         <input
           type="radio"
           name="location"
@@ -198,22 +198,20 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
       </div>
       <div>
         <span>Shift:</span>
-        <input
-          type="radio"
-          name="shiftTime"
-          value="10:00"
-          defaultChecked={shiftTime === "10:00"}
-          onChange={e => handleChanges(e)}
-        />{" "}
-        10:00
-        <input
-          type="radio"
-          name="shiftTime"
-          value="10:30"
-          defaultChecked={shiftTime === "10:30"}
-          onChange={e => handleChanges(e)}
-        />{" "}
-        10:30
+        {shifts.map(shift => {
+          return (
+            <div key={shift} style={{ display: "inline" }}>
+              <input
+                type="radio"
+                name="shiftTime"
+                value={shift}
+                defaultChecked={shiftTime === { shift }}
+                onChange={e => handleChanges(e)}
+              />
+              {shift}
+            </div>
+          );
+        })}
       </div>
       <div className="textareaContainer">
         <span>Comment:</span>
@@ -228,11 +226,12 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
   );
 }
 
-
-function OrderContent({ foods, restaurant, order, refetchOrder }) {
-
+function OrderContent({ foods, restaurant, shifts, order, refetchOrder }) {
   let foodInitialize;
-  order ? foodInitialize = order && foods.find( food => food.name === order.foodName) : foodInitialize = null
+  order
+    ? (foodInitialize =
+        order && foods.find(food => food.name === order.foodName))
+    : (foodInitialize = null);
   const [selectedFood, setSelectedFood] = useState(foodInitialize);
   const { user } = useContext(AuthContext);
   const dateNow = moment().format("YYYY-M-D-HH-mm");
@@ -257,19 +256,19 @@ function OrderContent({ foods, restaurant, order, refetchOrder }) {
     // console.log('this changed', data)
   }, [data]);
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     // console.log("sFood", selectedFood);
     const exactTimeOrdered = moment().format("YYYY-M-D-HH-mm");
     // console.log("Exact time ordered: ", exactTimeOrdered);
     if (!selectedFood) {
       return;
     }
-    upsertOrder({
+    await upsertOrder({
       variables: {
         foodName: selectedFood.name,
         quantity: 1,
         date: exactTimeOrdered,
-        restaurantName: restaurant,
+        restaurantName: restaurant.name,
         atLocation: selectedDetails === "onsight",
         comment: selectedDetails.comment,
         shift: selectedDetails.shiftTime,
@@ -291,7 +290,7 @@ function OrderContent({ foods, restaurant, order, refetchOrder }) {
     // });
 
     // setOrder(null);
-  console.log('Thishapens')
+    console.log("Thishapens");
     refetchOrder();
   };
 
@@ -308,6 +307,7 @@ function OrderContent({ foods, restaurant, order, refetchOrder }) {
         selectedDetails={selectedDetails}
         changeDetails={setSelectedDetails}
         restaurant={restaurant}
+        shifts={shifts}
       />
       <OrderButton onClick={handleOrder}>
         {order ? "Update Order" : "Order"}
@@ -368,7 +368,8 @@ function Menu({ selectedRestaurant, order, refetchOrder }) {
 
       <OrderContent
         foods={dailyMenu.food}
-        restaurant={dailyMenu.restaurant.name}
+        restaurant={dailyMenu.restaurant}
+        shifts={dailyMenu.shifts}
         order={order}
         refetchOrder={refetchOrder}
       />
