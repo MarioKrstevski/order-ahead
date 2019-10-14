@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 // import {} from "./mockOwner";
 import { restaurants, order, dailyMenu, orders, menu } from "./mockNewData";
 import config from "./config.json";
-import Cat from "./models/Cat";
 import Order from "./models/Order";
 import Restaurant from "./models/Restaurant";
+import DailyMenu from "./models/DailyMenu";
 // const DB_URI = config.dbUri;
 // mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -27,12 +27,24 @@ export default {
         .catch(e => console.log("Error in getOrder ", e));
     },
 
-    getDailyMenu: async (parent, {}, context, info) => {
-      return dailyMenu;
+    getDailyMenu: async (parent, { restaurant, date }, context, info) => {
+      const regex = "^" + date.slice(0, 10);
+      return await DailyMenu.findOne({
+        "restaurant.name": restaurant,
+        date: RegExp(regex)
+      })
+        .then(e => e)
+        .catch(e => console.log("Error in getRestaurants ", e));
     },
 
-    getOrders: async (parent, {}, context, info) => {
-      return orders;
+    getOrders: async (parent, { restaurant, date }, context, info) => {
+      const regex = "^" + date.slice(0, 10);
+      return await Order.find({
+        restaurantName: restaurant,
+        date: RegExp(regex)
+      })
+        .then(e => e)
+        .catch(e => console.log("Error in getOrders ", e));
     },
     getMenu: async (parent, { restaurant, date }, context, info) => {
       console.log("Ive been hit", restaurant, date);
@@ -81,6 +93,6 @@ export default {
     updateDailyMenu: async (parent, {}, context, info) => {},
     addFood: async (parent, {}, context, info) => {},
     deleteFood: async (parent, {}, context, info) => {},
-    updateFood: async (parent, {}, context, info) => {},
+    updateFood: async (parent, {}, context, info) => {}
   }
 };

@@ -329,10 +329,12 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
 }
 
 function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
+  const dateNow = moment().format("YYYY-M-D-HH-mm");
+  
   const { data, loading, error, refetch } = useQuery(GET_DAILY_MENU, {
     variables: {
       restaurant: selectedRestaurant,
-      date: Date().toString()
+      date: dateNow
     }
   });
 

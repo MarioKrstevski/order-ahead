@@ -8,6 +8,7 @@ const DailyMenuSchema = new mongoose.Schema({
     orderMax: Number,
     telephone: String
   },
+  ordersNumber : Number,
   date: String,
   food: [
     {
