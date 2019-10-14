@@ -1,14 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import moment from 'moment'
+import moment from "moment";
 
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo-hooks";
 import { AuthContext } from "../../../AuthContext";
 
+const Li = styled.li`
+  span {
+    display: inline-block;
+  }
+  .food {
+    width: 220px;
+  }
+
+  .user {
+    width: 80px;
+  }
+  .comment {
+  }
+`;
+
 const OrderListWrapper = styled.div`
   text-align: left;
+  margin-left: 10%;
 
+  h2 {
+    text-align: center;
+  }
   ul {
     /* margin: 0;
     padding: 0; */
@@ -41,7 +60,7 @@ function sortByCategory(a, b) {
 function OrdersList() {
   const { user } = useContext(AuthContext);
 
-  console.log("USER", user)
+  console.log("USER", user);
 
   console.log("Restaurant ", user.restaurant);
   const today = moment().format("YYYY-M-D");
@@ -95,22 +114,70 @@ function OrdersList() {
   //     </Category>
   //   );
   // });
-  const formattedList = {};
 
-  data.getOrders.forEach( order =>{
-    console.log(order)
-    if (!formattedList.hasOwnProperty(order.food.category)) {
-      formattedList[order.food.category] = [];
-    }
+  // TUJ E KOD
+  // const formattedList = {};
 
-    formattedList[order.food.category].push(order);
-  })
+  // data.getOrders.forEach( order =>{
+  //   console.log(order)
+  //   if (!formattedList.hasOwnProperty(order.food.category)) {
+  //     formattedList[order.food.category] = [];
+  //   }
 
-  console.log(formattedList)
+  //   formattedList[order.food.category].push(order);
+  // })
+
+  // console.log(formattedList)
+
+  const toGo = data.getOrders.filter(order => !order.atLocation);
+  const toGoList = toGo.map(order => (
+    <Li key={order.foodName + order.comment}>
+      <span className="food">{order.foodName}</span>
+      <span className="user"> [{order.user}]</span>
+      <span className="comment">
+        ({order.comment ? order.comment : "No comment"})
+      </span>
+    </Li>
+  ));
+
+  const inHouse = data.getOrders.filter(order => order.atLocation);
+  const inHouseFirst = inHouse.filter(order => order.shift === "10:00");
+  const inHouseSecond = inHouse.filter(order => order.shift === "11:00");
+
+  const inHouseFirstList = inHouseFirst.map(order => (
+    <Li key={order.foodName + order.comment}>
+      <span className="food">{order.foodName}</span>
+      <span className="user"> [{order.user}]</span>
+      <span className="comment">
+        ({order.comment ? order.comment : "No comment"})
+      </span>
+    </Li>
+  ));
+
+  const inHouseSecondList = inHouseSecond.map(order => (
+    <Li key={order.foodName + order.comment}>
+      <span className="food">{order.foodName}</span>
+      <span className="user"> [{order.user}]</span>
+      <span className="comment">
+        ({order.comment ? order.comment : "No comment"})
+      </span>
+    </Li>
+  ));
+
   return (
     <OrderListWrapper>
-      <h1 style={{ maginLeft: 20 }}> All orders for today </h1>
-      <ul>{formattedList}</ul>
+      <h2 style={{ maginLeft: 20 }}> All orders for today </h2>
+
+      <h3>Za Nosenje: </h3>
+      <ul>{toGoList}</ul>
+
+      <h3>In-House</h3>
+
+      <p>10:00 Smena:</p>
+      <ul>{inHouseFirstList}</ul>
+
+      <p>11:00 Smena:</p>
+      <ul>{inHouseSecondList}</ul>
     </OrderListWrapper>
   );
 }

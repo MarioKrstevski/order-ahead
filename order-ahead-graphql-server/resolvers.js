@@ -92,8 +92,7 @@ export default {
         .catch(err => console.log("Error in cancelOrder: ,", err));
     },
 
-    createDailyMenu: async (parent, {}, context, info) => {},
-    updateDailyMenu: async (parent, {}, context, info) => {},
+    upsertDailyMenu: async (parent, {}, context, info) => {},
     addFood: async (parent, {}, context, info) => {},
     deleteFood: async (parent, {}, context, info) => {},
     updateFood: async (parent, {}, context, info) => {}
