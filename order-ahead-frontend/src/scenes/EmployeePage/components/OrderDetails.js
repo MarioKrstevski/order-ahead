@@ -1,5 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import moment from 'moment'
+
+import gql from "graphql-tag";
+
+import { useQuery, useMutation } from "react-apollo-hooks";
+import { AuthContext } from "../../../AuthContext";
+
 
 const OrderContainer = styled.div`
   margin: 0 20px;
@@ -34,14 +41,36 @@ const CancelButton = styled.button`
   }
 `;
 
+const CANCEL_ORDER = gql`
+mutation CANCEL_ORDER(
+  $date: String!
+  $user: String!
+) {
+  makeOrder(
+    date: $date
+    user: $user
+  ) {
+    Boolean
+  }
+}
+`
+
 function OrderDetails({ order, setOrder , refetch}) {
+
+  const [cancelOrder, { data }] = useMutation(CANCEL_ORDER);
+  const { user } = useContext(AuthContext)
+    const dateNow = moment().format("D-M-YYYY-HH-mm");
   const handleCancel = () => {
     setOrder(null);
-    refetch({
-      date: "hehe",
-      username: "hehe"
-    });
-    console.log('this happens')
+    cancelOrder({ variables : {
+      date: dateNow,
+      user: user.name
+    }})
+    // refetch({
+    //   date: "hehe",
+    //   username: "hehe"
+    // });
+    
   };
   const {
     orderId,
@@ -51,7 +80,6 @@ function OrderDetails({ order, setOrder , refetch}) {
     comment,
     food,
     shift,
-    user
   } = order;
   return (
     <OrderContainer>
@@ -62,7 +90,7 @@ function OrderDetails({ order, setOrder , refetch}) {
       </div>
       <div>
         <b>For customer: </b>
-        {user}
+        {user.name}
       </div>
       <div>
         <b>Ordered: </b>

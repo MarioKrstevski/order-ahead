@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../../AuthContext";
+import moment from "moment";
 
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo-hooks";
@@ -158,7 +159,6 @@ function RestaurantInformation({
   );
 }
 function MenuItems({ foods, selectFood }) {
-
   const onFoodChanged = (event, food) => {
     selectFood(food);
   };
@@ -180,14 +180,13 @@ function MenuItems({ foods, selectFood }) {
 }
 
 function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
+  const { user, date, location, shiftTime } = selectedDetails;
 
-  const  {user, date, location, shift } = selectedDetails
-
-  const handleChanges = (e) => {
-    console.log("Name:" , e.target.name);
-    console.log("Value:" , e.target.value);
-    changeDetails({ ...selectedDetails, [e.target.name]:e.target.value})
-  }
+  const handleChanges = e => {
+    console.log("Name:", e.target.name);
+    console.log("Value:", e.target.value);
+    changeDetails({ ...selectedDetails, [e.target.name]: e.target.value });
+  };
   return (
     <OtherDetailsWrapper>
       <div>
@@ -196,28 +195,62 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
       <div>
         <span>Date:</span> {date}
       </div>
-      <div  >
+      <div>
         <span>Location:</span>
-        <input type="radio" name="location" value="onsight" defaultChecked={location === "onsight"}  onChange={ (e) => handleChanges(e)} /> {restaurant}
-        <input type="radio" name="location" value="takeaway"  onChange={ (e) => handleChanges(e)} /> take-away
+        <input
+          type="radio"
+          name="location"
+          value="onsight"
+          defaultChecked={location === "onsight"}
+          onChange={e => handleChanges(e)}
+        />{" "}
+        {restaurant}
+        <input
+          type="radio"
+          name="location"
+          value="takeaway"
+          onChange={e => handleChanges(e)}
+        />{" "}
+        take-away
       </div>
-      <div  >
+      <div>
         <span>Shift:</span>
-        <input type="radio" name="shiftTime" value="10:00" defaultChecked={shift === "10:00"}  onChange={ (e) => handleChanges(e)} /> 10:00
-        <input type="radio" name="shiftTime" value="10:30"  onChange={ (e) => handleChanges(e)} /> 10:30
+        <input
+          type="radio"
+          name="shiftTime"
+          value="10:00"
+          defaultChecked={shiftTime === "10:00"}
+          onChange={e => handleChanges(e)}
+        />{" "}
+        10:00
+        <input
+          type="radio"
+          name="shiftTime"
+          value="10:30"
+          defaultChecked={shiftTime === "10:30"}
+          onChange={e => handleChanges(e)}
+        />{" "}
+        10:30
       </div>
       <div className="textareaContainer">
         <span>Comment:</span>
-        <textarea rows="4" cols="30" name="comment" onChange={ (e) => handleChanges(e) }/>
+        <textarea
+          rows="4"
+          cols="30"
+          name="comment"
+          onChange={e => handleChanges(e)}
+        />
       </div>
     </OtherDetailsWrapper>
   );
 }
 
-function OrderContent({foods, restaurant, order, setOrder, refetchOrder}) {
+function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
   const [selectedFood, setSelectedFood] = useState(null);
   const { user } = useContext(AuthContext);
-  const dateNow = new Date().toLocaleDateString();
+  const dateNow = moment().format("YYYY-M-D-HH-mm");
+
+  console.log("date Now ", dateNow);
 
   const [selectedDetails, setSelectedDetails] = useState({
     user: user.name,
@@ -231,22 +264,29 @@ function OrderContent({foods, restaurant, order, setOrder, refetchOrder}) {
     setSelectedFood(food);
   };
 
-  const [makeOrder, { data: makeOrderData }] = useMutation(MAKE_ORDER);
+  const [makeOrder, { data }] = useMutation(MAKE_ORDER);
+
+  useEffect(()=>{
+      console.log('this changed', data)
+  }, [data])
 
   const handleOrder = () => {
-
-    console.log('sFood', selectedFood)
-
-    selectedFood && makeOrder({
+    console.log("sFood", selectedFood);
+    const exactTimeOrdered = moment().format("YYYY-M-D-HH-mm");
+    console.log("Exact time ordered: ", exactTimeOrdered);
+    if (!selectedFood) {
+      return;
+    }
+    makeOrder({
       variables: {
         foodName: selectedFood.name,
         quantity: 1,
-        date: selectedDetails.date,
+        date: exactTimeOrdered,
         restaurantName: restaurant,
         atLocation: selectedDetails === "onsight",
         comment: selectedDetails.comment,
         shift: selectedDetails.shiftTime,
-        user:selectedDetails.user
+        user: selectedDetails.user
       }
     });
 
@@ -259,12 +299,12 @@ function OrderContent({foods, restaurant, order, setOrder, refetchOrder}) {
         atLocation: selectedDetails === "onsight",
         comment: selectedDetails.comment,
         shift: selectedDetails.shiftTime,
-        user:selectedDetails.user
+        user: selectedDetails.user
       }
-    })
+    });
 
-    setOrder(null);
-    refetchOrder({ date: "hehe", username: "hehe" });
+    // setOrder(null);
+    // refetchOrder({ date: "hehe", username: "hehe" });
   };
 
   return (
@@ -276,7 +316,11 @@ function OrderContent({foods, restaurant, order, setOrder, refetchOrder}) {
         selectFood={selectFood}
       />
       <H3>Details</H3>
-      <OtherDetails selectedDetails={selectedDetails} changeDetails={setSelectedDetails} restaurant={restaurant} />
+      <OtherDetails
+        selectedDetails={selectedDetails}
+        changeDetails={setSelectedDetails}
+        restaurant={restaurant}
+      />
       <OrderButton onClick={handleOrder}>
         {order ? "Update Order" : "Order"}
       </OrderButton>
@@ -285,17 +329,12 @@ function OrderContent({foods, restaurant, order, setOrder, refetchOrder}) {
 }
 
 function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
-
   const { data, loading, error, refetch } = useQuery(GET_DAILY_MENU, {
     variables: {
       restaurant: selectedRestaurant,
       date: Date().toString()
     }
   });
-
- 
-
-   
 
   if (loading) return "Loading daily menu...";
   if (error) return `Error daily menu! ${error.message}`;
@@ -316,9 +355,7 @@ function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
         order={order}
         refetchOrder={refetchOrder}
         setOrder={setOrder}
-       />
-
-      
+      />
     </MenuWrapper>
   );
 }

@@ -65,7 +65,7 @@ export default gql`
 
     type Mutation {
         makeOrder(foodName: String!, quantity: Int!, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
-        cancelOrder(date: String!): Boolean
+        cancelOrder(date: String!, user: String! ): Boolean
         updateOrder: Order
 
         createDailyMenu(foods:[foodInput!]!, restaurantName: String!, date: String!): DailyMenu

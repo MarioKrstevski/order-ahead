@@ -1,5 +1,6 @@
 import React, { useContext, useState, useMemo, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
+import moment from 'moment'
 import api from "../../services/api";
 import styled from 'styled-components';
 
@@ -50,10 +51,15 @@ function EmployeePage() {
   const [selectedRestaurant, setSelectedRestaurant] = useState("");
   const [order, setOrder] = useState(null)
 
+  const { user } = useContext(AuthContext)
+  const today = moment().format('YYYY-M-D')
+
+  console.log('today',today)
+
   const orderQuery = useQuery(GET_ORDER, {
     variables: {
-      date: "hehe",
-      username: "hehe"
+      date: today,
+      username: user.name
     }
   })
   const { data, error, loading } = useQuery(GET_RESTAURANTS);
@@ -61,7 +67,7 @@ function EmployeePage() {
   useEffect(() => {
     data && setSelectedRestaurant(data.getRestaurants[0].name);
     orderQuery.data && setOrder(orderQuery.data.getOrder);
-  }, [data, order])
+  }, [data, order, orderQuery])
 
   if (loading) return "Loading restaurants...";
   if (error) return `Error restaurants! ${error.message}`;
