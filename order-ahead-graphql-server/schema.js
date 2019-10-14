@@ -34,8 +34,8 @@ export default gql`
     }
     
     type Menu {
-        food: [Food]
-        restaurant: Restaurant
+        food: [Food],
+        restaurant: String
     }
 
     type DailyMenu {
@@ -53,15 +53,14 @@ export default gql`
         getDailyMenu(date: String!, restaurant: String!): DailyMenu
 
         getOrders(date: String!, restaurant: String!): [Order]
-        getMenu(date: String!, restaurant: String!): Menu
+        getMenu(restaurant: String!): Menu
     }
 
 
 
     type Mutation {
-        makeOrder(foodName: String!, quantity: Int!, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
+        upsertOrder(foodName: String!, quantity: Int!, date: String!, restaurantName: String!, atLocation: Boolean!, comment: String!, shift: String!, user: String!): Order
         cancelOrder(date: String!, user: String! ): Order
-        updateOrder: Order
 
         createDailyMenu(foods:[foodInput!]!, restaurantName: String!, date: String!): DailyMenu
         updateDailyMenu(foods:[foodInput!]!, restaurantName: String!, date: String!): DailyMenu

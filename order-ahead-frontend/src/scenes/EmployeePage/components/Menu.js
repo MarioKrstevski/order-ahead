@@ -108,8 +108,8 @@ const GET_DAILY_MENU = gql`
   }
 `;
 
-const MAKE_ORDER = gql`
-  mutation MAKE_ORDER(
+const UPSERT_ORDER = gql`
+  mutation UPSERT_ORDER(
     $foodName: String!
     $quantity: Int!
     $date: String!
@@ -119,7 +119,7 @@ const MAKE_ORDER = gql`
     $shift: String!
     $user: String!
   ) {
-    makeOrder(
+    upsert(
       foodName: $foodName
       quantity: $quantity
       date: $date
@@ -264,7 +264,7 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
     setSelectedFood(food);
   };
 
-  const [makeOrder, { data }] = useMutation(MAKE_ORDER);
+  const [upsertOrder, { data }] = useMutation(UPSERT_ORDER);
 
   useEffect(()=>{
       console.log('this changed', data)
@@ -277,7 +277,7 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
     if (!selectedFood) {
       return;
     }
-    makeOrder({
+    upsertOrder({
       variables: {
         foodName: selectedFood.name,
         quantity: 1,

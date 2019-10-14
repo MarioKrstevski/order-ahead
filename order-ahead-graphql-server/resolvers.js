@@ -6,6 +6,7 @@ import config from "./config.json";
 import Order from "./models/Order";
 import Restaurant from "./models/Restaurant";
 import DailyMenu from "./models/DailyMenu";
+import Menu from "./models/Menu";
 // const DB_URI = config.dbUri;
 // mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -20,7 +21,6 @@ export default {
         .catch(e => console.log("Error in getRestaurants ", e));
     },
     getOrder: async (parent, { username, date }, context, info) => {
-      console.log("getOrder hit: ", username, date);
       const regex = "^" + date.slice(0, 10);
       return await Order.findOne({ user: "Mario", date: RegExp(regex) })
         .then(e => e)
@@ -46,13 +46,14 @@ export default {
         .then(e => e)
         .catch(e => console.log("Error in getOrders ", e));
     },
-    getMenu: async (parent, { restaurant, date }, context, info) => {
-      console.log("Ive been hit", restaurant, date);
-      return menu;
+    getMenu: async (parent, { restaurant }, context, info) => {
+      return await Menu.findOne({ restaurant: restaurant })
+        .then(e => e)
+        .catch(e => console.log("Error in getOrders ", e));
     }
   },
   Mutation: {
-    makeOrder: async (
+    upsertOrder: async (
       parent,
       { date, restaurantName, atLocation, comment, foodName, shift, user },
       context,
@@ -87,7 +88,6 @@ export default {
         .then(e => e)
         .catch(err => console.log("Error in cancelOrder: ,", err));
     },
-    updateOrder: async (parent, {}, context, info) => {},
 
     createDailyMenu: async (parent, {}, context, info) => {},
     updateDailyMenu: async (parent, {}, context, info) => {},

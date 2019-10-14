@@ -188,5 +188,5 @@ export const menu = {
       price: 444
     }
   ],
-  restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },  
+  restaurant: "Forza",  
 };
