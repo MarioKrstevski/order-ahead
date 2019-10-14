@@ -5,6 +5,7 @@ import { restaurants, order, dailyMenu, orders, menu } from "./mockNewData";
 import config from "./config.json";
 import Cat from "./models/Cat";
 import Order from "./models/Order";
+import Restaurant from "./models/Restaurant"
 // const DB_URI = config.dbUri;
 // mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -14,7 +15,7 @@ import Order from "./models/Order";
 export default {
   Query: {
     getRestaurants: async (parent, {}, context, info) => {
-      return restaurants;
+      return await Restaurant.find();
     },
     getOrder: async (parent, { username, date }, context, info) => {
       console.log("getOrder hit: ", username, date);
@@ -25,7 +26,7 @@ export default {
     },
 
     getDailyMenu: async (parent, {}, context, info) => {
-      
+
       return dailyMenu;
     },
 
