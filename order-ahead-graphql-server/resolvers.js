@@ -5,7 +5,7 @@ import { restaurants, order, dailyMenu, orders, menu } from "./mockNewData";
 import config from "./config.json";
 import Cat from "./models/Cat";
 import Order from "./models/Order";
-import Restaurant from "./models/Restaurant"
+import Restaurant from "./models/Restaurant";
 // const DB_URI = config.dbUri;
 // mongoose.connect(DB_URI, { useNewUrlParser: true });
 
@@ -15,7 +15,9 @@ import Restaurant from "./models/Restaurant"
 export default {
   Query: {
     getRestaurants: async (parent, {}, context, info) => {
-      return await Restaurant.find();
+      return await Restaurant.find()
+        .then(e => e)
+        .catch(e => console.log("Error in getRestaurants ", e));
     },
     getOrder: async (parent, { username, date }, context, info) => {
       console.log("getOrder hit: ", username, date);
@@ -26,7 +28,6 @@ export default {
     },
 
     getDailyMenu: async (parent, {}, context, info) => {
-
       return dailyMenu;
     },
 
@@ -45,61 +46,34 @@ export default {
       context,
       info
     ) => {
-      let finished;
-      const regex = "/^" + date.slice(0.1) + "/";
-      console.log("Vidi ovoj ", { user: user, $or: [{ date: RegExp(regex) }] });
-      try {
-        finished = await Order.findOneAndReplace(
-          { user: user, $or: [{ date: RegExp(regex) }] },
-          {
-            // _id: new mongoose.Types.ObjectId(),
-            date,
-            restaurantName,
-            atLocation,
-            comment,
-            foodName,
-            shift,
-            user
-          },
-          {
-            upsert: true,
-            returnNewDocument: true
-          },
-          function(err, order) {
-            if (err) {
-              console.log("Error in the query");
-            }
-
-            console.log("ORDER ::: ", order);
-            finished = order;
-            return order;
-          }
-        );
-      } catch (e) {
-        console.log(e);
-      }
-
-      console.log("Finished", finished);
-      return finished;
+      const regex = "^" + date.slice(0, 10);
+      return await Order.findOneAndReplace(
+        { user: user, date: RegExp(regex) },
+        {
+          date,
+          restaurantName,
+          atLocation,
+          comment,
+          foodName,
+          shift,
+          user
+        },
+        {
+          upsert: true,
+          returnOriginal: false
+        }
+      )
+        .then(e => e)
+        .catch(e => console.log("Error in makeOrder ,", e));
     },
     cancelOrder: async (parent, { date, user }, context, info) => {
-      let canceledOrder = false;
-      try {
-        canceledOrder = await Order.findOneAndDelete(
-          { user: "Mario", $or: [{ date: /^2019-10-10/ }] },
-          function(err, resp) {
-            if (err) {
-              console.log("Mongoose failed findOneAndDelte", err);
-            }
-            console.log("[CancelOrder]", resp);
-            canceledOrder = resp;
-            return resp;
-          }
-        );
-        return canceledOrder;
-      } catch (e) {
-        console.log("Couldnt do cancel order, error :", e);
-      }
+      const regex = "^" + date.slice(0, 10);
+      return await Order.findOneAndDelete({
+        user: user,
+        date: RegExp(regex)
+      })
+        .then(e => e)
+        .catch(err => console.log("Error in cancelOrder: ,", err));
     },
     updateOrder: async (parent, {}, context, info) => {},
 
@@ -108,21 +82,5 @@ export default {
     addFood: async (parent, {}, context, info) => {},
     deleteFood: async (parent, {}, context, info) => {},
     updateFood: async (parent, {}, context, info) => {},
-    createCat: async (parent, { name }, context, info) => {
-      console.log("Kitty was saved in DB");
-      const kitty = new Cat({
-        // _id: new mongoose.Types.ObjectId() ,
-        name: "Gerry"
-      });
-      console.log("Kitty was saved in DB 2");
-
-      kitty
-        .save()
-        .then(result => {
-          console.log("meow ,", result);
-        })
-        .catch(err => console.log("Error cat", err));
-      console.log("Kitty was saved in DB 3");
-    }
   }
 };
