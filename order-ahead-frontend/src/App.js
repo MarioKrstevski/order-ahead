@@ -99,12 +99,23 @@ export default function App() {
     });
   };
   const [user, setUser] = useState({
-    name: "Stefan",
+    name: "Mario",
     token: "12345678",
-    role: "owner",
-    restaurant: "Forza",
+    role: "employee",
+    restaurant: null,
     isAuthenticated: true
   });
+
+  // name: "Stefan",
+  // token: "12345678",
+  // role: "owner",
+  // restaurant: "Forza",
+  // isAuthenticated: true
+
+    // password:"mario123",
+    // name: "Mario",
+    // token: 'abcdefgh',
+    // role: "employee",
 
   // name: null,
   // token: null,

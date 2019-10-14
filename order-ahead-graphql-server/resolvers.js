@@ -22,12 +22,14 @@ export default {
     },
     getOrder: async (parent, { username, date }, context, info) => {
       const regex = "^" + date.slice(0, 10);
-      return await Order.findOne({ user: "Mario", date: RegExp(regex) })
+      return await Order.findOne({ user: username, date: RegExp(regex) })
         .then(e => e)
         .catch(e => console.log("Error in getOrder ", e));
     },
 
     getDailyMenu: async (parent, { restaurant, date }, context, info) => {
+      console.log("getDailyMenu HIT : restaurant ,user", restaurant , date)
+     
       const regex = "^" + date.slice(0, 10);
       return await DailyMenu.findOne({
         "restaurant.name": restaurant,
@@ -80,6 +82,7 @@ export default {
         .catch(e => console.log("Error in makeOrder ,", e));
     },
     cancelOrder: async (parent, { date, user }, context, info) => {
+      console.log("cancleOrder HIT : date,user", date , user)
       const regex = "^" + date.slice(0, 10);
       return await Order.findOneAndDelete({
         user: user,

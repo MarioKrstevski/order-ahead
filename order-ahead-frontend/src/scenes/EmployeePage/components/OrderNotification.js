@@ -18,12 +18,7 @@ const OrderNotificationContent = styled.div`
   }
 `;
 
-function OrderNotification({ orderQuery }) {
-  const { data, loading, error } = orderQuery;
-
-  if (loading) return "Loading order...";
-  if (error) return `Error order! ${error.message}`;
-
+function OrderNotification() {
   return (
     <OrderNotificationContent>
       <div>

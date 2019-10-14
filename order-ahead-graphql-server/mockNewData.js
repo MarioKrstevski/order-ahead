@@ -4,23 +4,18 @@ export const restaurants = [
 ];
 
 export const order = {
-  orderId: 1,
-  date: "27-7-2019",
-  restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
+  date: "2019-10-14-10-15",
+  restaurantName: "Forza",
   atLocation: true,
   comment: "Povekje sirenje",
-  food: {
-    category: "Salad",
-    name: "Quatro Fromage",
-    price: 360
-  },
+  foodName:"Quatro Fromage",
   shift: "10:00",
   user: "Mario"
 };
 
 export const dailyMenu = {
   restaurant: { name: "Forza", location: "Taftalidze", orderMax: 45, telephone: '38977555560' },
-  date: "23-04-2019",
+  date: "2019-10-14",
   ordersNumber: 6,
   food: [
     {

@@ -11,10 +11,10 @@ import { AuthContext } from "../../../AuthContext";
 const OrderContainer = styled.div`
   margin: 0 20px;
   margin-top: 70px;
-  height: 300px;
+  height: 340px;
   border: 2px dashed green;
   position: relative;
-  width: 400px;
+  width:300px;
   text-align: left;
   padding: 20px;
   & b {
@@ -46,59 +46,63 @@ mutation CANCEL_ORDER(
   $date: String!
   $user: String!
 ) {
-  makeOrder(
+  cancelOrder(
     date: $date
     user: $user
   ) {
-    Boolean
+    date
+    restaurantName
+    atLocation
+    comment
+    foodName
+    shift
+    user
   }
 }
 `
 
-function OrderDetails({ order, setOrder , refetch}) {
+function OrderDetails({ order , refetchOrder}) {
 
   const [cancelOrder, { data }] = useMutation(CANCEL_ORDER);
   const { user } = useContext(AuthContext)
-    const dateNow = moment().format("D-M-YYYY-HH-mm");
+    const dateNow = moment().format("YYYY-M-D-HH-mm");
   const handleCancel = () => {
-    setOrder(null);
     cancelOrder({ variables : {
       date: dateNow,
       user: user.name
     }})
-    // refetch({
-    //   date: "hehe",
-    //   username: "hehe"
-    // });
-    
+
+    refetchOrder();
   };
+  
   const {
-    orderId,
     date,
-    restaurant,
+    restaurantName,
     atLocation,
     comment,
-    food,
+    foodName,
     shift,
   } = order;
+  
+  const time = date.slice(11,16).split('-').join(":");
   return (
     <OrderContainer>
     <h1 style={{margin: 0, marginBottom: 10}}>Your order</h1>
       <div>
-        <b>Order number: </b>
-        {orderId}
-      </div>
-      <div>
-        <b>For customer: </b>
+        <b>Customer: </b>
         {user.name}
       </div>
       <div>
         <b>Ordered: </b>
-        {food.name}
+        {foodName}
       </div>
       <div>
         <b>Date: </b>
-        {date}
+        {date.slice(0,10)}
+      </div>
+      <div>
+        <b>Time: </b>
+        {time}
       </div>
       <div>
         <b>Shift: </b>
@@ -106,7 +110,7 @@ function OrderDetails({ order, setOrder , refetch}) {
       </div>
       <div>
         <b>Restaurant: </b>
-        {restaurant.name}{" "}
+        {restaurantName}{" "}
       </div>
       <div>
         <b>Location: </b>

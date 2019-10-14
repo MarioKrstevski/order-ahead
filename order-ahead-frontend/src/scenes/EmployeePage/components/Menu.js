@@ -92,22 +92,6 @@ const OrderButton = styled.button`
   }
 `;
 
-const GET_DAILY_MENU = gql`
-  query GET_DAILY_MENU($date: String!, $restaurant: String!) {
-    getDailyMenu(date: $date, restaurant: $restaurant) {
-      food {
-        name
-        category
-      }
-      restaurant {
-        name
-        orderMax
-        telephone
-      }
-    }
-  }
-`;
-
 const UPSERT_ORDER = gql`
   mutation UPSERT_ORDER(
     $foodName: String!
@@ -119,7 +103,7 @@ const UPSERT_ORDER = gql`
     $shift: String!
     $user: String!
   ) {
-    upsert(
+    upsertOrder(
       foodName: $foodName
       quantity: $quantity
       date: $date
@@ -134,12 +118,8 @@ const UPSERT_ORDER = gql`
   }
 `;
 
-function RestaurantInformation({
-  ordersNumber,
-  restaurant,
-  orderMax,
-  telephone
-}) {
+function RestaurantInformation({ ordersNumber, restaurant }) {
+  const { telephone, name, location, orderMax } = restaurant;
   let number =
     "+" +
     telephone.slice(0, 3) +
@@ -151,14 +131,16 @@ function RestaurantInformation({
     telephone.slice(8, 11);
   return (
     <InformationWrapper>
-      {ordersNumber}/{orderMax} people have ordered today at {restaurant} today.
+      {ordersNumber}/{orderMax} people have ordered today at {name} today.
       <br />
-      For questions and aditional requests call {restaurant} at
-      <span> {number} </span>
+      For questions and aditional requests call {name} at
+      <span> {number} .</span>
+      <br />
+      You can find {name} on {location} street.
     </InformationWrapper>
   );
 }
-function MenuItems({ foods, selectFood }) {
+function MenuItems({ foods,selectedFood, selectFood }) {
   const onFoodChanged = (event, food) => {
     selectFood(food);
   };
@@ -169,6 +151,7 @@ function MenuItems({ foods, selectFood }) {
           type="radio"
           name="food"
           value={food.name}
+          defaultChecked={selectedFood === food.name}
           onChange={e => onFoodChanged(e, food)}
         />
         <div className="category">{food.category}</div>
@@ -183,8 +166,8 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
   const { user, date, location, shiftTime } = selectedDetails;
 
   const handleChanges = e => {
-    console.log("Name:", e.target.name);
-    console.log("Value:", e.target.value);
+    // console.log("Name:", e.target.name);
+    // console.log("Value:", e.target.value);
     changeDetails({ ...selectedDetails, [e.target.name]: e.target.value });
   };
   return (
@@ -245,12 +228,16 @@ function OtherDetails({ restaurant, selectedDetails, changeDetails }) {
   );
 }
 
-function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
-  const [selectedFood, setSelectedFood] = useState(null);
+
+function OrderContent({ foods, restaurant, order, refetchOrder }) {
+
+  let foodInitialize;
+  order ? foodInitialize = order && foods.find( food => food.name === order.foodName) : foodInitialize = null
+  const [selectedFood, setSelectedFood] = useState(foodInitialize);
   const { user } = useContext(AuthContext);
   const dateNow = moment().format("YYYY-M-D-HH-mm");
 
-  console.log("date Now ", dateNow);
+  // console.log("date Now ", dateNow);
 
   const [selectedDetails, setSelectedDetails] = useState({
     user: user.name,
@@ -266,14 +253,14 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
 
   const [upsertOrder, { data }] = useMutation(UPSERT_ORDER);
 
-  useEffect(()=>{
-      console.log('this changed', data)
-  }, [data])
+  useEffect(() => {
+    // console.log('this changed', data)
+  }, [data]);
 
   const handleOrder = () => {
-    console.log("sFood", selectedFood);
+    // console.log("sFood", selectedFood);
     const exactTimeOrdered = moment().format("YYYY-M-D-HH-mm");
-    console.log("Exact time ordered: ", exactTimeOrdered);
+    // console.log("Exact time ordered: ", exactTimeOrdered);
     if (!selectedFood) {
       return;
     }
@@ -290,21 +277,22 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
       }
     });
 
-    console.log("Order: ", {
-      variables: {
-        foodName: selectedFood.name,
-        quantity: 1,
-        date: selectedDetails.date,
-        restaurantName: restaurant,
-        atLocation: selectedDetails === "onsight",
-        comment: selectedDetails.comment,
-        shift: selectedDetails.shiftTime,
-        user: selectedDetails.user
-      }
-    });
+    // console.log("Order: ", {
+    //   variables: {
+    //     foodName: selectedFood.name,
+    //     quantity: 1,
+    //     date: selectedDetails.date,
+    //     restaurantName: restaurant,
+    //     atLocation: selectedDetails === "onsight",
+    //     comment: selectedDetails.comment,
+    //     shift: selectedDetails.shiftTime,
+    //     user: selectedDetails.user
+    //   }
+    // });
 
     // setOrder(null);
-    // refetchOrder({ date: "hehe", username: "hehe" });
+  console.log('Thishapens')
+    refetchOrder();
   };
 
   return (
@@ -327,36 +315,62 @@ function OrderContent({ foods, restaurant, order, setOrder, refetchOrder }) {
     </>
   );
 }
+const GET_DAILY_MENU = gql`
+  query GET_DAILY_MENU($date: String!, $restaurant: String!) {
+    getDailyMenu(date: $date, restaurant: $restaurant) {
+      food {
+        name
+        category
+      }
+      restaurant {
+        name
+        location
+        orderMax
+        telephone
+      }
+      ordersNumber
+      date
+      shifts
+    }
+  }
+`;
 
-function Menu({ selectedRestaurant, order, setOrder, refetch: refetchOrder }) {
-  const dateNow = moment().format("YYYY-M-D-HH-mm");
-  
-  const { data, loading, error, refetch } = useQuery(GET_DAILY_MENU, {
+function Menu({ selectedRestaurant, order, refetchOrder }) {
+  const dateNow = moment()
+    .format("YYYY-M-D-HH-mm")
+    .slice(0, 10);
+  const [dailyMenu, setDailyMenu] = useState(null);
+
+  const { data, loading, error } = useQuery(GET_DAILY_MENU, {
     variables: {
       restaurant: selectedRestaurant,
       date: dateNow
     }
   });
 
+  useEffect(() => {
+    data && setDailyMenu(data.getDailyMenu);
+  }, [data]);
+
   if (loading) return "Loading daily menu...";
   if (error) return `Error daily menu! ${error.message}`;
 
-  const foods = data.getDailyMenu.food;
+  if (!dailyMenu) {
+    return "There is no menu for today :(";
+  }
 
   return (
     <MenuWrapper>
       <RestaurantInformation
-        ordersNumber={data.getDailyMenu.ordersNumber}
-        orderMax={data.getDailyMenu.restaurant.orderMax}
-        telephone={data.getDailyMenu.restaurant.telephone}
-        restaurant={data.getDailyMenu.restaurant.name}
+        ordersNumber={dailyMenu.ordersNumber}
+        restaurant={dailyMenu.restaurant}
       />
+
       <OrderContent
-        foods={foods}
-        restaurant={data.getDailyMenu.restaurant.name}
+        foods={dailyMenu.food}
+        restaurant={dailyMenu.restaurant.name}
         order={order}
         refetchOrder={refetchOrder}
-        setOrder={setOrder}
       />
     </MenuWrapper>
   );
