@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import { useQuery } from "react-apollo-hooks";
 import gql from "graphql-tag";
+import moment from 'moment'
 import { AuthContext } from "../../../AuthContext";
 
 const MenuWrapper = styled.div`
@@ -14,18 +15,14 @@ const MenuWrapper = styled.div`
 `;
 
 const GET_MENU = gql`
-query GET_MENU($restaurant: String!, $date: String!) {
-  getMenu(restaurant: $restaurant, date: $date) {
+query GET_MENU($restaurant: String!) {
+  getMenu(restaurant: $restaurant) {
       food {
         name
         category
         price
       }
-      restaurant {
-        name
-        orderMax
-        telephone
-      }
+      restaurant
     }
   }
 `;
@@ -53,13 +50,10 @@ const Category = styled.div`
 
 function Menu() {
   const { user } = useContext(AuthContext);
-  const today = new Date().toDateString();
-
 
   const { data, loading, error, refetch } = useQuery(GET_MENU, {
     variables: {
       restaurant: user.restaurant || "Forza",
-      date: today + 'Menu - OwnerPage'
     }
   });
 

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import gql from "graphql-tag";
 import { AuthContext } from "../../../AuthContext";
+import moment from "moment";
 
 const CreateMenuWrapper = styled.div`
   margin-left: 50px;
@@ -14,6 +15,7 @@ const CreateMenuWrapper = styled.div`
 `;
 
 const OrderButton = styled.button`
+  display: block;
   background-color: #6c8ab4;
   margin-top: 50px;
   padding: 12px 20px;
@@ -45,48 +47,63 @@ const Type = styled.h2`
 
 const Category = styled.div`
   text-align: left;
+  margin-bottom: 20px;
 `;
 
+const Button = styled.button`
+  padding: 10px;
+  background-color: coral;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+
+  ${props => (props.active ? "background-color: orange" : null)}
+`;
 
 const GET_MENU = gql`
-  query GET_MENU($restaurant: String!, $date: String!) {
-    getMenu(restaurant: $restaurant, date: $date) {
+  query GET_MENU($restaurant: String!) {
+    getMenu(restaurant: $restaurant) {
       food {
         name
         category
         price
       }
-      restaurant {
-        name
-        orderMax
-        telephone
-      }
+      restaurant
     }
   }
 `;
 
-const CREATE_DAILY_MENU = gql`
-  mutation CREATE_DAILY_MENU(
+const UPSERT_DAILY_MENU = gql`
+  mutation UPSERT_DAILY_MENU(
     $foods: [foodInput!]!
     $restaurant: String!
     $date: String!
   ) {
-    createDailyMenu(foods: $foods, restaurant: $restaurant, date: $date)
+    upsertDailyMenu(foods: $foods, restaurant: $restaurant, date: $date)
   }
 `;
 
 function CreateMenu() {
   const { user } = useContext(AuthContext);
-  const tomorrow = new Date().setDate(new Date().getDate() + 1);
-  const today = new Date().toDateString();
+  const date = {
+    today: moment()
+      .format("YYYY-M-D-HH-mm")
+      .slice(0, 10),
+    tomorrow: moment()
+      .add(1, "day")
+      .format("YYYY-M-D-HH-mm")
+      .slice(0, 10)
+  };
 
   const [selectedFoodItems, setSelectedFoodItems] = useState([]);
-  const [createDailyMenu, { loading: mutationLoading }] = useMutation(
-    CREATE_DAILY_MENU,
+  const [selectedDate, setSelectedDate] = useState("tomorrow");
+  const [upsertDailyMenu, { loading: mutationLoading }] = useMutation(
+    UPSERT_DAILY_MENU,
     {
       variables: {
         restaurant: user.restaurant || "Forza",
-        date: tomorrow,
+        date: date.selectedDate,
         foods: selectedFoodItems
       }
     }
@@ -94,18 +111,16 @@ function CreateMenu() {
 
   const { data, loading, error, refetch } = useQuery(GET_MENU, {
     variables: {
-      restaurant: user.restaurant || "Forza",
-      date: today + 'CreateMenu - OwnerPage'
+      restaurant: user.restaurant || "Forza"
     }
   });
-
 
   const clickHandler = () => {
     setSelectedFoodItems([
       ...selectedFoodItems,
       { name: "Capriccioza", category: "Pizza", price: 300 }
     ]);
-    createDailyMenu();
+    upsertDailyMenu();
   };
 
   // let loading,error,data;
@@ -146,6 +161,18 @@ function CreateMenu() {
   return (
     <CreateMenuWrapper>
       {menu}
+      <Button
+        onClick={() => setSelectedDate("today")}
+        active={selectedDate === "today"}
+      >
+        Update for Today
+      </Button>
+      <Button
+        onClick={() => setSelectedDate("tomorrow")}
+        active={selectedDate === "tomorrow"}
+      >
+        Create for Tomorrow
+      </Button>
 
       <OrderButton onClick={clickHandler} disabled={mutationLoading}>
         Create Daily Menu

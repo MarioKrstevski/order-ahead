@@ -166,7 +166,7 @@ function OrdersList() {
 
   return (
     <OrderListWrapper>
-      <h2 style={{ maginLeft: 20 }}> All orders for today </h2>
+      <h2 style={{ maginLeft: 20 }}> All orders for today: {data.getOrders.length} </h2>
 
       <h3>Za Nosenje: </h3>
       <ul>{toGoList}</ul>

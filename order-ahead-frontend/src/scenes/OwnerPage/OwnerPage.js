@@ -13,7 +13,7 @@ import "react-tabs/style/react-tabs.css";
 
 
 function OwnerPage() {
-  const { user, restaurant } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <Tabs defaultIndex={0}>
@@ -28,7 +28,7 @@ function OwnerPage() {
         <OrdersList />
       </TabPanel>
       <TabPanel>
-        <DailyMenu />
+        <DailyMenu user={user} />
       </TabPanel>
       <TabPanel>
         <Menu />

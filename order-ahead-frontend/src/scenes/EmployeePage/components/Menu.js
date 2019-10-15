@@ -166,8 +166,8 @@ function OtherDetails({ restaurant, shifts, selectedDetails, changeDetails }) {
   const { user, date, location, shiftTime } = selectedDetails;
 
   const handleChanges = e => {
-    // console.log("Name:", e.target.name);
-    // console.log("Value:", e.target.value);
+    console.log("Name:", e.target.name);
+    console.log("Value:", e.target.value);
     changeDetails({ ...selectedDetails, [e.target.name]: e.target.value });
   };
   return (
@@ -269,7 +269,7 @@ function OrderContent({ foods, restaurant, shifts, order, refetchOrder }) {
         quantity: 1,
         date: exactTimeOrdered,
         restaurantName: restaurant.name,
-        atLocation: selectedDetails === "onsight",
+        atLocation: selectedDetails.location === "onsight",
         comment: selectedDetails.comment,
         shift: selectedDetails.shiftTime,
         user: selectedDetails.user
@@ -337,6 +337,7 @@ const GET_DAILY_MENU = gql`
 
 function Menu({ selectedRestaurant, order, refetchOrder }) {
   const dateNow = moment()
+    .subtract(1, "day")
     .format("YYYY-M-D-HH-mm")
     .slice(0, 10);
   const [dailyMenu, setDailyMenu] = useState(null);
