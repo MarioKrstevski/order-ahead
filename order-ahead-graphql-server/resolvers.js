@@ -28,8 +28,8 @@ export default {
     },
 
     getDailyMenu: async (parent, { restaurant, date }, context, info) => {
-      console.log("getDailyMenu HIT : restaurant ,user", restaurant , date)
-     
+      console.log("getDailyMenu HIT : restaurant ,user", restaurant, date);
+
       const regex = "^" + date.slice(0, 10);
       return await DailyMenu.findOne({
         "restaurant.name": restaurant,
@@ -49,6 +49,7 @@ export default {
         .catch(e => console.log("Error in getOrders ", e));
     },
     getMenu: async (parent, { restaurant }, context, info) => {
+      console.log("getMenu is being HIT");
       return await Menu.findOne({ restaurant: restaurant })
         .then(e => e)
         .catch(e => console.log("Error in getOrders ", e));
@@ -82,7 +83,7 @@ export default {
         .catch(e => console.log("Error in makeOrder ,", e));
     },
     cancelOrder: async (parent, { date, user }, context, info) => {
-      console.log("cancleOrder HIT : date,user", date , user)
+      console.log("cancleOrder HIT : date,user", date, user);
       const regex = "^" + date.slice(0, 10);
       return await Order.findOneAndDelete({
         user: user,
@@ -92,7 +93,47 @@ export default {
         .catch(err => console.log("Error in cancelOrder: ,", err));
     },
 
-    upsertDailyMenu: async (parent, {}, context, info) => {},
+    upsertDailyMenu: async (
+      parent,
+      { restaurantName, date, foods },
+      context,
+      info
+    ) => {
+      // console.log(
+      //   "upsertDailyMenu HIT : date,user",
+      //   restaurantName,
+      //   date,
+      //   foods
+      // );
+
+      const restaurantFullObject = await Restaurant.findOne({
+        name: restaurantName
+      });
+
+      const restaurantFullObjectNoID = {
+        name: restaurantFullObject.name,
+        location: restaurantFullObject.location,
+        orderMax: restaurantFullObject.orderMax,
+        telephone: restaurantFullObject.telephone,
+        shifts: restaurantFullObject.shifts
+      };
+      // console.log('Restaurant full object:', restaurantFullObject)F
+
+      return await DailyMenu.findOneAndReplace(
+        {
+          "restaurant.name": restaurantName,
+          date: date
+        },
+        {
+          restaurant: restaurantFullObjectNoID,
+          date,
+          ordersNumber: 6,
+          food: foods,
+          shifts: restaurantFullObjectNoID.shifts
+        },
+        { upsert: true, returnOriginal: false }s
+      );
+    },
     addFood: async (parent, {}, context, info) => {},
     deleteFood: async (parent, {}, context, info) => {},
     updateFood: async (parent, {}, context, info) => {}

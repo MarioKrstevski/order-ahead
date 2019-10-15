@@ -6,7 +6,7 @@ import { AuthContext } from "../../../AuthContext";
 import moment from "moment";
 
 const CreateMenuWrapper = styled.div`
-  margin-left: 50px;
+  margin: 0 auto;
   background-color: white;
   /* border: 1px solid black; */
   position: relative;
@@ -14,7 +14,7 @@ const CreateMenuWrapper = styled.div`
   padding: 0 15px 20px;
 `;
 
-const OrderButton = styled.button`
+const CreateButton = styled.button`
   display: block;
   background-color: #6c8ab4;
   margin-top: 50px;
@@ -57,6 +57,7 @@ const Button = styled.button`
   border-radius: 4px;
   outline: none;
   cursor: pointer;
+  margin-right: 6px;
 
   ${props => (props.active ? "background-color: orange" : null)}
 `;
@@ -77,10 +78,30 @@ const GET_MENU = gql`
 const UPSERT_DAILY_MENU = gql`
   mutation UPSERT_DAILY_MENU(
     $foods: [foodInput!]!
-    $restaurant: String!
+    $restaurantName: String!
     $date: String!
   ) {
-    upsertDailyMenu(foods: $foods, restaurant: $restaurant, date: $date)
+    upsertDailyMenu(
+      foods: $foods
+      restaurantName: $restaurantName
+      date: $date
+    ) {
+      food {
+        name
+        category
+        price
+      }
+
+      restaurant {
+        name
+        location
+        orderMax
+        telephone
+      }
+      ordersNumber
+      date
+      shifts
+    }
   }
 `;
 
@@ -99,14 +120,7 @@ function CreateMenu() {
   const [selectedFoodItems, setSelectedFoodItems] = useState([]);
   const [selectedDate, setSelectedDate] = useState("tomorrow");
   const [upsertDailyMenu, { loading: mutationLoading }] = useMutation(
-    UPSERT_DAILY_MENU,
-    {
-      variables: {
-        restaurant: user.restaurant || "Forza",
-        date: date.selectedDate,
-        foods: selectedFoodItems
-      }
-    }
+    UPSERT_DAILY_MENU
   );
 
   const { data, loading, error, refetch } = useQuery(GET_MENU, {
@@ -115,12 +129,37 @@ function CreateMenu() {
     }
   });
 
-  const clickHandler = () => {
-    setSelectedFoodItems([
-      ...selectedFoodItems,
-      { name: "Capriccioza", category: "Pizza", price: 300 }
-    ]);
-    upsertDailyMenu();
+  const includeFood = food => {
+    const filteredOutCategoryFoodItems = selectedFoodItems.filter(
+      item => item.category !== food.category
+    );
+    const foodWithoutTypename = {
+      category: food.category,
+      name: food.name,
+      price: food.price
+    }
+    setSelectedFoodItems([...filteredOutCategoryFoodItems, foodWithoutTypename]);
+  };
+
+  const upsertHandler = async () => {
+    if (!selectedFoodItems.length) {
+      console.log("You need to select something");
+      return;
+    }
+
+    console.log(
+      "Eve shto kje se upsert",
+      user.restaurant,
+      date[selectedDate],
+      selectedFoodItems
+    );
+    await upsertDailyMenu({
+      variables: {
+        restaurantName: user.restaurant || "Forza",
+        date: date[selectedDate],
+        foods: selectedFoodItems
+      }
+    });
   };
 
   // let loading,error,data;
@@ -128,7 +167,7 @@ function CreateMenu() {
   if (loading) return "Loading menu...";
   if (error) return `Error menu! ${error.message}`;
 
-  console.log("[MenuOwner]:", data);
+  // console.log("[MenuOwner]:", data);
 
   const categorySorted = {};
 
@@ -147,7 +186,11 @@ function CreateMenu() {
         {categorySorted[category].map(food => {
           return (
             <FoodItem key={food.name}>
-              <input type="radio" name={category} />
+              <input
+                type="radio"
+                name={category}
+                onChange={() => includeFood(food)}
+              />
               <div>{food.name}</div>
             </FoodItem>
           );
@@ -156,7 +199,7 @@ function CreateMenu() {
     );
   });
 
-  console.log(categorySorted);
+  // console.log(categorySorted);
 
   return (
     <CreateMenuWrapper>
@@ -174,9 +217,9 @@ function CreateMenu() {
         Create for Tomorrow
       </Button>
 
-      <OrderButton onClick={clickHandler} disabled={mutationLoading}>
+      <CreateButton onClick={upsertHandler} disabled={mutationLoading}>
         Create Daily Menu
-      </OrderButton>
+      </CreateButton>
     </CreateMenuWrapper>
   );
 }
