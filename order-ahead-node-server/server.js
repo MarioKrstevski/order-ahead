@@ -271,7 +271,7 @@ app.post("/login", (req, res) => {
         name: ownerData.name,
         token: ownerData.token,
         role: ownerData.role,
-        restaurant: ownerData.restaurant ? ownerData.restaurant: null,
+        restaurant: ownerData.restaurant ? ownerData.restaurant : null,
       });
     } else {
       return res.json({

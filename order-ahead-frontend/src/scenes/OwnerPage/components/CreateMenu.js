@@ -168,6 +168,9 @@ function CreateMenu() {
   if (error) return `Error menu! ${error.message}`;
 
   // console.log("[MenuOwner]:", data);
+  if(data.getMenus === null){
+    return "Nema jadenja vo sistemot"
+  }
 
   const categorySorted = {};
 

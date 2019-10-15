@@ -337,7 +337,7 @@ const GET_DAILY_MENU = gql`
 
 function Menu({ selectedRestaurant, order, refetchOrder }) {
   const dateNow = moment()
-    // .subtract(1, "day")
+    .subtract(1, "day")
     .format("YYYY-M-D-HH-mm")
     .slice(0, 10);
   const [dailyMenu, setDailyMenu] = useState(null);

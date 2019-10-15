@@ -143,6 +143,7 @@ function OrdersList() {
   const inHouse = data.getOrders.filter(order => order.atLocation);
   const inHouseFirst = inHouse.filter(order => order.shift === "10:00");
   const inHouseSecond = inHouse.filter(order => order.shift === "11:00");
+  const inHouseThird = inHouse.filter(order => order.shift === "12:00");
 
   const inHouseFirstList = inHouseFirst.map(order => (
     <Li key={order.foodName + order.comment}>
@@ -164,20 +165,35 @@ function OrdersList() {
     </Li>
   ));
 
+  const inHouseThirdList = inHouseThird.map(order => (
+    <Li key={order.foodName + order.comment}>
+      <span className="food">{order.foodName}</span>
+      <span className="user"> [{order.user}]</span>
+      <span className="comment">
+        ({order.comment ? order.comment : "No comment"})
+      </span>
+    </Li>
+  ));
+
   return (
     <OrderListWrapper>
       <h2 style={{ maginLeft: 20 }}> All orders for today: {data.getOrders.length} </h2>
 
-      <h3>Za Nosenje: </h3>
-      <ul>{toGoList}</ul>
+     {!data.getOrders.length ? <p>Nema naracki za denes</p>  : null}
 
-      <h3>In-House</h3>
+    { toGoList.length ?  <h3>Za Nosenje: </h3> : null}
+    { toGoList.length ?  <ul>{toGoList}</ul> : null}
 
-      <p>10:00 Smena:</p>
-      <ul>{inHouseFirstList}</ul>
+    {(inHouseFirstList.length || inHouseSecondList.length || inHouseThirdList.length ) ? <h3>In-House</h3> : null }
 
-      <p>11:00 Smena:</p>
-      <ul>{inHouseSecondList}</ul>
+     {inHouseFirstList.length ? <p>10:00 Smena:</p>  : null}
+     {inHouseFirstList.length ? <ul>{inHouseFirstList}</ul>  : null}
+
+     {inHouseSecondList.length ?<p>11:00 Smena:</p>  : null}
+     {inHouseSecondList.length ? <ul>{inHouseSecondList}</ul>  : null }
+
+     { inHouseThirdList.length ? <p>11:00 Smena:</p>  : null}
+     { inHouseThirdList.length ?<ul>{inHouseThirdList}</ul>  : null}
     </OrderListWrapper>
   );
 }

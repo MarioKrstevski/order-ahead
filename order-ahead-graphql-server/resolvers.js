@@ -131,7 +131,7 @@ export default {
           food: foods,
           shifts: restaurantFullObjectNoID.shifts
         },
-        { upsert: true, returnOriginal: false }s
+        { upsert: true, returnOriginal: false }
       );
     },
     addFood: async (parent, {}, context, info) => {},

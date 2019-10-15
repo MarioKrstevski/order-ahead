@@ -65,6 +65,10 @@ function Menu() {
 
   const categorySorted = {};
 
+  if(data.getMenus === null){
+    return "Nema jadenja vo sistemot"
+  }
+
   data.getMenu.food.forEach(food => {
     if (!categorySorted.hasOwnProperty(food.category)) {
       categorySorted[food.category] = [];

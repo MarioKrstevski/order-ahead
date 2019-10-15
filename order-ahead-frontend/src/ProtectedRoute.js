@@ -14,7 +14,6 @@ function ProtectedRoute({component:Component, prevLocation, allowed, authenticat
     if(allowed.includes("all") || allowed.includes(user.role)){
         return <Component {...rest} />
     } else {
-        alert('You don\'t have access to that resource');
         return null;
     }
 }
